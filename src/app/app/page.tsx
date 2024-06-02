@@ -2,6 +2,7 @@ import Link from "next/link";
 import OrganizationCard from "./OrganizationCard";
 import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
+import { useAuthorizedMiddleware } from "@/lib/middleware";
 
 export const metadata = {
     title: 'App | Stage Right',
@@ -10,7 +11,7 @@ export const metadata = {
 
 const App = async () => {
 
-    const session = await auth();
+    const session = await useAuthorizedMiddleware();
 
     if(!session)
         return null;
