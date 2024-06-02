@@ -1,23 +1,30 @@
-"use client";
+import { auth, signIn, signOut } from "@/auth";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+const SignInButton = async () => {
 
-const SignInButton = () => {
+    const session = await auth();
 
-    const session = useSession();
-
-    if(session && session.data) {
+    if(!session) { // Not Logged In
         return (
-            <div className="flex gap-4 ml-auto">
-                <p className="text-sky-600">{session.data.user?.name}</p>
-                <button className="btn btn-error" onClick={() => signOut()}>Sign Out</button>
-            </div>
+            <form action={async () => {
+                "use server";
+                await signIn("google");
+            }}>
+                <button type="submit" className="btn btn-neutral">Sign in with Google</button>
+            </form>
+        )
+    } else {
+        return (
+            <form action={async () => {
+                "use server";
+                await signOut();
+            }}>
+                <h1>{session.user?.name}</h1>
+                <button type="submit" className="btn btn-error">Sign Out</button>
+            </form>
         )
     }
 
-    return (
-        <button className="btn btn-success ml-auto" onClick={() => signIn("google")}>Sign In</button>
-    )
 
 }
 

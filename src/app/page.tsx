@@ -1,5 +1,4 @@
 import SignInButton from "@/components/SignInButton";
-import { signIn } from "next-auth/react";
 import Link from "next/link"
 
 const Page = () => {

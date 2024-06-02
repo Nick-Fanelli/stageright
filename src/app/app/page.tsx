@@ -1,5 +1,7 @@
 import Link from "next/link";
 import OrganizationCard from "./OrganizationCard";
+import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 
 export const metadata = {
     title: 'App | Stage Right',
@@ -7,6 +9,11 @@ export const metadata = {
 }
 
 const App = async () => {
+
+    const session = await auth();
+
+    if(!session)
+        return null;
 
     return (
         <section id="app" className="h-screen w-screen overflow-hidden">
@@ -24,7 +31,7 @@ const App = async () => {
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img alt="Profile Picture" src="https://lh3.googleusercontent.com/a/ACg8ocLajqOU1g9qKDRX8GYhZziT-dmYOlpxHicS_DW-g7QsDrxgpB7R=s288-c-no" />
+                                    <img alt="Profile Picture" src={session.user?.image || "https://t3.ftcdn.net/jpg/03/79/17/00/360_F_379170051_7No0Yg8z2uxbyby4Y0WFDNCBZo18tNGr.jpg"} />
                                 </div>
                             </div>
                             <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52">
@@ -45,6 +52,7 @@ const App = async () => {
 
                 <div id="organizations" className="w-screen h-screen overflow-y-auto">
                     <OrganizationCard name="WHS Theater" />
+                    <h1>DATA: {JSON.stringify(session)}</h1>
                 </div>
 
             </main>
