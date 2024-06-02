@@ -1,8 +1,7 @@
 import Link from "next/link";
 import OrganizationCard from "./OrganizationCard";
-import { auth } from "@/auth";
-import { useSession } from "next-auth/react";
 import { useAuthorizedMiddleware } from "@/lib/middleware";
+import { getUser } from "@/actions/user.actions";
 
 export const metadata = {
     title: 'App | Stage Right',
@@ -12,9 +11,7 @@ export const metadata = {
 const App = async () => {
 
     const session = await useAuthorizedMiddleware();
-
-    if(!session)
-        return null;
+    const user = await getUser();
 
     return (
         <section id="app" className="h-screen w-screen overflow-hidden">
@@ -53,7 +50,7 @@ const App = async () => {
 
                 <div id="organizations" className="w-screen h-screen overflow-y-auto">
                     <OrganizationCard name="WHS Theater" />
-                    <h1>DATA: {JSON.stringify(session)}</h1>
+                    <h1>DATA: {JSON.stringify(user)}</h1>
                 </div>
 
             </main>
