@@ -45,7 +45,7 @@ const App = async () => {
             <main className="">
                 <div className="flex items-center pl-10 pt-7">
                     <h1 className="text-3xl font-bold">All Organizations</h1>
-                    <button className="ml-5 btn btn-primary">New Organization</button>
+                    <Link href="/app/new-organization"><button className="ml-5 btn btn-primary">New Organization</button></Link>
                 </div>
 
                 <div id="organizations" className="w-screen h-screen overflow-y-auto">

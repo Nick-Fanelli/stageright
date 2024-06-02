@@ -1,5 +1,5 @@
 import { auth, signIn } from "@/auth"
-import { RedirectType, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export const useAuthorizedMiddleware = async () => {
     "use server";

@@ -5,12 +5,14 @@ export interface IUser extends Document {
 }
 
 const userSchema = new Schema<IUser>({
+
     email: {
         type: String,
         unique: true,
         required: true
     }
-});
+
+}, { timestamps: true });
 
 const UserModel: Model<IUser> = models.user || model<IUser>("user", userSchema);
 
