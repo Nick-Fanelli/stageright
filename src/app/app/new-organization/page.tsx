@@ -1,4 +1,4 @@
-import { createOrganization } from "@/actions/organizaton.actions";
+import { createOrganization } from "@/actions/organization.actions";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 

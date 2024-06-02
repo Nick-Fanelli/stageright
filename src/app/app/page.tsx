@@ -1,7 +1,7 @@
 import Link from "next/link";
-import OrganizationCard from "./OrganizationCard";
 import { useAuthorizedMiddleware } from "@/lib/middleware";
 import { getUser } from "@/actions/user.actions";
+import Organizations from "./Organizations";
 
 export const metadata = {
     title: 'App | Stage Right',
@@ -48,10 +48,7 @@ const App = async () => {
                     <Link href="/app/new-organization"><button className="ml-5 btn btn-primary">New Organization</button></Link>
                 </div>
 
-                <div id="organizations" className="w-screen h-screen overflow-y-auto">
-                    <OrganizationCard name="WHS Theater" />
-                    <h1>DATA: {JSON.stringify(user)}</h1>
-                </div>
+                <Organizations />
 
             </main>
 

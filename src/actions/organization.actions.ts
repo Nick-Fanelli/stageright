@@ -13,13 +13,24 @@ export const createOrganization = async (organizationName: string) : Promise<IOr
     const session = await auth();
     const dbUser = await getUser();
 
-    if(!session || !session.user)
-        return null;
-
-    if(!dbUser)
+    if(!session || !session.user || !dbUser)
         return null;
 
     const organization = await OrganizationModel.create({ name: organizationName, owner: dbUser.id });
     return await organization.save();
+
+}
+
+export const getAllUserOrganizations = async () : Promise<IOrganization[]> => {
+
+    await connectDB();
+
+    const session = await auth();
+    const dbUser = await getUser();
+
+    if(!session || !session.user || !dbUser)
+        return [];
+
+    return await OrganizationModel.find({ owner: dbUser.id }).exec();
 
 }
