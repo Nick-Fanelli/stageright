@@ -1,20 +1,19 @@
 import Link from "next/link";
 import { useAuthorizedMiddleware } from "@/lib/middleware";
 import { getUser } from "@/actions/user.actions";
-import Organizations from "./Organizations";
+import Spaces from "./Spaces";
 
 export const metadata = {
-    title: 'App | Stage Right',
+    title: 'Spaces | Stage Right',
     description: '',
 }
 
 const App = async () => {
 
     const session = await useAuthorizedMiddleware();
-    const user = await getUser();
 
     return (
-        <section id="app" className="h-screen w-screen overflow-hidden">
+        <section id="spaces" className="h-screen w-screen overflow-hidden">
             <header className="">
                 <nav className="navbar bg-base-200">
                     <div className="flex-1">
@@ -44,11 +43,11 @@ const App = async () => {
 
             <main className="">
                 <div className="flex items-center pl-10 pt-7">
-                    <h1 className="text-3xl font-bold">All Organizations</h1>
-                    <Link href="/app/new-organization"><button className="ml-5 btn btn-primary">New Organization</button></Link>
+                    <h1 className="text-3xl font-bold">All Spaces</h1>
+                    <Link href="/spaces/new"><button className="ml-5 btn btn-primary">New Space</button></Link>
                 </div>
 
-                <Organizations />
+                <Spaces />
 
             </main>
 

@@ -4,7 +4,7 @@ type Props = {
 
 }
 
-const OrganizationCard = async (props: Props) => {
+const SpaceCard = async (props: Props) => {
 
     return (
         <div className="card w-96 bg-base-200 text-base inline-flex m-8">
@@ -12,7 +12,7 @@ const OrganizationCard = async (props: Props) => {
             <div className="card-body card-normal">
                 <h1 className="card-title text-2xl">{props.name}</h1>
                 <div>
-                    <p>10 Organization Units</p>
+                    <p>100 Assets</p>
                     <p>10 Users</p>
                 </div>
 
@@ -26,4 +26,4 @@ const OrganizationCard = async (props: Props) => {
 
 }
 
-export default OrganizationCard;
+export default SpaceCard;

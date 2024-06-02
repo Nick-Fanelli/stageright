@@ -1,14 +1,14 @@
 import { Document, Model, Schema, model, models } from "mongoose";
 import UserModel from "./user.model";
 
-export interface IOrganization extends Document {
+export interface ISpace extends Document {
 
     name: string,
     owner: Schema.Types.ObjectId
 
 }
 
-const organizationSchema = new Schema<IOrganization>({
+const spaceSchema = new Schema<ISpace>({
 
     name: {
         type: String,
@@ -23,6 +23,6 @@ const organizationSchema = new Schema<IOrganization>({
 
 }, { timestamps: true });
 
-const OrganizationModel: Model<IOrganization> = models.organization || model<IOrganization>("organization", organizationSchema);
+const SpaceModel: Model<ISpace> = models.space || model<ISpace>("space", spaceSchema);
 
-export default OrganizationModel;
+export default SpaceModel;

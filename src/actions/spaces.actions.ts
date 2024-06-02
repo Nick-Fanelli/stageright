@@ -2,11 +2,11 @@
 
 import { auth } from "@/auth";
 import connectDB from "@/lib/db";
-import OrganizationModel, { IOrganization } from "@/models/organization.models";
 import { IUser } from "@/models/user.model";
 import { getUser } from "./user.actions";
+import SpaceModel, { ISpace } from "@/models/space.models";
 
-export const createOrganization = async (organizationName: string) : Promise<IOrganization | null> => {
+export const createSpace = async (spaceName: string) : Promise<ISpace | null> => {
 
     await connectDB();
 
@@ -16,12 +16,12 @@ export const createOrganization = async (organizationName: string) : Promise<IOr
     if(!session || !session.user || !dbUser)
         return null;
 
-    const organization = await OrganizationModel.create({ name: organizationName, owner: dbUser.id });
-    return await organization.save();
+    const space = await SpaceModel.create({ name: spaceName, owner: dbUser.id });
+    return await space.save();
 
 }
 
-export const getAllUserOrganizations = async () : Promise<IOrganization[]> => {
+export const getAllUserSpaces = async () : Promise<ISpace[]> => {
 
     await connectDB();
 
@@ -31,6 +31,6 @@ export const getAllUserOrganizations = async () : Promise<IOrganization[]> => {
     if(!session || !session.user || !dbUser)
         return [];
 
-    return await OrganizationModel.find({ owner: dbUser.id }).exec();
+    return await SpaceModel.find({ owner: dbUser.id }).exec();
 
 }
