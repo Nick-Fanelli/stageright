@@ -10,7 +10,7 @@ const Spaces = async () => {
 
             {
                 spaces.map((space, index) => (
-                    <SpaceCard key={`space-${space.id}-${index}`} name={space.name} />
+                    <SpaceCard key={`space-${space.id}-${index}`} name={space.name} id={space.id} />
                 ))
             }
 

@@ -1,6 +1,9 @@
+import { redirect } from "next/navigation";
+
 type Props = {
 
     name: string,
+    id: string
 
 }
 
@@ -17,7 +20,13 @@ const SpaceCard = async (props: Props) => {
                 </div>
 
                 <div className="card-actions justify-end">
-                    <button className="btn btn-neutral">Access</button>
+                    <form action={async () => {
+                        "use server";
+
+                        redirect(`space/${props.id}`)
+                    }}>
+                        <button type="submit" className="btn btn-neutral">Access</button>
+                    </form>
                 </div>
             </div>
 

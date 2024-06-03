@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createSpace } from "@/actions/spaces.actions";
 
+export const metadata = {
+    title: 'New Space | Stage Right'
+}
+
 const NewSpace = () => {
 
     return (
