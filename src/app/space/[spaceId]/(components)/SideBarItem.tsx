@@ -7,20 +7,20 @@ type Props = {
     displayName: string
     route: string
     icon?: IconDefinition
-    selected?: boolean
+    activePath: string
 
 }
 
 const SideBarItem = (props: Props) => {
 
     return (
-        <div className={`w-11/12 pl-5 rounded-md py-2 cursor-pointer hover:bg-base-300 ${props.selected ? "bg-base-300" : ""}`}>
+        <div className={`w-11/12 pl-5 rounded-md py-2 cursor-pointer hover:bg-base-300 ${props.activePath.startsWith(props.route) ? "bg-base-300" : ""}`}>
             <Link href={props.route} className="flex justify-start items-center w-full h-full">
                 {
                     props.icon &&
                     <FontAwesomeIcon icon={props.icon} className="w-5 h-5 mr-3" />
                 }
-                Dashboard
+                {props.displayName}
             </Link>
         </div>
     )

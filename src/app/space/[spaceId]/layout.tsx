@@ -1,37 +1,16 @@
 import { ActionResponseCode } from "@/actions/actions";
 import { getSpace } from "@/actions/spaces.actions";
 import { auth } from "@/auth";
-import { faDashboard, faDisplay } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBox, faDisplay, faTag } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SideBarItem from "./(components)/SideBarItem";
 import { headers } from "next/headers";
-import { space } from "postcss/lib/list";
+import SideBarItems from "./(components)/SideBarItems";
 
 export const metadata = {
     title: 'Space | Stage Right',
     description: '',
-}
-
-const deriveActivePath = (url: string | null, spaceId: string) : string => {
-
-    if(url == null) {
-        console.warn("URL of NULL ", url);
-        return "";
-    }
-    
-    const parts = url.split(spaceId);
-
-    if(parts.length !== 2) {
-        console.warn("Weird URL", url);
-        return "";
-    }
-
-    const split = parts[1].split("/");
-
-    return split[1];
-
 }
 
 export default async function RootLayout({ children, params }: { children: React.ReactNode, params: { spaceId: string } }) {
@@ -54,10 +33,6 @@ export default async function RootLayout({ children, params }: { children: React
         redirect("/spaces");
     }
 
-    const activePath = deriveActivePath(headers().get('next-url'), params.spaceId);
-
-    const generateURL = (page: string) => `/space/${params.spaceId}/${page}`;
-
     return (
         <section id="space" className="w-screen h-screen overflow-hidden grid" style={{ gridTemplateColumns: "300px auto" }}>
 
@@ -65,26 +40,20 @@ export default async function RootLayout({ children, params }: { children: React
                 <div className="header h-16 text-base-content flex justify-center items-center w-full">
                     <Link className="btn btn-ghost text-2xl w-11/12" href={"/spaces"}>Stage Right</Link>
                 </div>
-                <div className="w-full overflow-y-auto flex flex-col items-center">
-                    <SideBarItem displayName="Dashboard" icon={faDisplay} route={generateURL("dashboard")} selected={activePath === "dashboard"} />
-                    <SideBarItem displayName="Dashboard" icon={faDisplay} route={generateURL("dashboard")} />
-                    <SideBarItem displayName="Dashboard" icon={faDisplay} route={generateURL("dashboard")} />
-                    <SideBarItem displayName="Dashboard" icon={faDisplay} route={generateURL("dashboard")} />
-                </div>
+                <SideBarItems spaceId={params.spaceId} />
             </nav>
 
+            <div className="bg-base-300 grid" style={{gridTemplateRows: "4rem auto"}}>
 
-            <div className="bg-base-300">
-
-                <nav id="top-bar" className="navbar h-16 bg-base-100">
+                <nav id="top-bar" className="navbar bg-base-100 h-full">
                     <div className="flex-1">
-                        <div className="text-sm breadcrumbs ml-5">
+                        {/* <div className="text-sm breadcrumbs ml-5">
                             <ul>
                                 <li><Link href="#">lorem1</Link></li>
                                 <li><Link href="#">lorem2</Link></li>
                                 <li><Link href="#">lorem3</Link></li>
                             </ul>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="flex-none">
                         <label className="swap swap-rotate mr-4">
@@ -106,6 +75,10 @@ export default async function RootLayout({ children, params }: { children: React
                         </div>
                     </div>
                 </nav>
+
+                <div className="w-full h-full relative">
+                    {children}
+                </div>
 
             </div>
 
