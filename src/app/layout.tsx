@@ -1,3 +1,4 @@
+import ThemeProvider, { ThemeContext } from './providers/ThemeProvider';
 import './globals.css'
 
 export const metadata = {
@@ -7,11 +8,13 @@ export const metadata = {
 
 export default async function RootLayout({ children } : { children: React.ReactNode }) {
 
-    // const session = await getServerSession();
-
     return (
-        <html lang="en" data-theme="dark">
-            <body>{children}</body>
+        <html lang="en">
+            <body>
+                <ThemeProvider>
+                    {children}
+                </ThemeProvider>
+            </body>
         </html>
     );
 }
