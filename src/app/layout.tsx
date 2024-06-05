@@ -9,7 +9,7 @@ export default async function RootLayout({ children } : { children: React.ReactN
 
     return (
         <html lang="en">
-            <body>
+            <body data-theme="dark">
                 {children}
             </body>
         </html>

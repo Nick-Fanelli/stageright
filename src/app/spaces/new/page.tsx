@@ -43,7 +43,7 @@ const NewSpace = () => {
 
                 <label className="form-control w-1/2">
                     <div className="label"><span className="label-text">Space Name</span></div>
-                    <input type="text" name="space-name" id="space-name" className="input bg-neutral w-100" placeholder="Space Name" />
+                    <input type="text" name="space-name" id="space-name" className="input bg-base-300 w-100 text-base-content" placeholder="Space Name" />
                 </label>
                 
                 <p className="mt-10 w-1/2 text-wrap">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae necessitatibus odit saepe iste et. Minima, illo cupiditate ex temporibus ducimus, nam repellendus, debitis inventore iure placeat facere sequi quia est.</p>
