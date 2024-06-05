@@ -3,6 +3,7 @@ import { useAuthorizedMiddleware } from "@/lib/middleware";
 import { getUser } from "@/actions/user.actions";
 import Spaces from "./Spaces";
 import ThemeController from "../components/ThemeController";
+import Image from "next/image";
 
 export const metadata = {
     title: 'Spaces | Stage Right',
@@ -25,7 +26,7 @@ const App = async () => {
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img alt="Profile Picture" src={session.user?.image || "https://t3.ftcdn.net/jpg/03/79/17/00/360_F_379170051_7No0Yg8z2uxbyby4Y0WFDNCBZo18tNGr.jpg"} />
+                                    <Image alt="Profile Picture" src={session.user?.image || "https://t3.ftcdn.net/jpg/03/79/17/00/360_F_379170051_7No0Yg8z2uxbyby4Y0WFDNCBZo18tNGr.jpg"} fill />
                                 </div>
                             </div>
                             <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52">

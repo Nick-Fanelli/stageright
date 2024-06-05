@@ -1,10 +1,16 @@
 import Link from "next/link";
 
-const LocationComponent = async () => {
+type Props = {
+
+    name: string
+
+}
+
+const LocationComponent = async (props: Props) => {
 
     return (
         <tr className="hover">
-            <th>Some Name</th>
+            <th>{props.name}</th>
             <td>
                 <Link className="link" href={"#"}>Edit</Link>
             </td>

@@ -1,6 +1,8 @@
 import { getAllUserSpaces } from "@/actions/spaces.actions";
 import SpaceCard from "./SpaceCard";
 
+export const revalidate = 0;
+
 const Spaces = async () => {
 
     const spaces = await getAllUserSpaces();

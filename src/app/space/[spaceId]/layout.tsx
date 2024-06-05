@@ -1,20 +1,27 @@
 import { ActionResponseCode } from "@/actions/actions";
-import { getSpace } from "@/actions/spaces.actions";
+import { getSpace, isUserAuthorizedForSpace } from "@/actions/spaces.actions";
 import { auth } from "@/auth";
 import { faBox, faDisplay, faTag } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SideBarItem from "./(components)/SideBarItem";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import SideBarItems from "./(components)/SideBarItems";
 import ThemeController from "@/app/components/ThemeController";
+import Image from "next/image";
 
 export const metadata = {
     title: 'Space | Stage Right',
     description: '',
 }
 
-export default async function RootLayout({ children, params }: { children: React.ReactNode, params: { spaceId: string } }) {
+export type SpaceParams = {
+
+    spaceId: string
+
+}
+
+export default async function RootLayout({ children, params }: { children: React.ReactNode, params: SpaceParams }) {
 
     const session = await auth();
 
@@ -27,13 +34,13 @@ export default async function RootLayout({ children, params }: { children: React
         redirect("/spaces");
     }
 
-    const space = await getSpace(params.spaceId);
+    const isAuthorized = await isUserAuthorizedForSpace(params.spaceId);
 
-    if (space.code !== ActionResponseCode.SUCCESS || !space.payload) { // TODO: Handle not allowed, etc. differently
-        console.warn("Not allowed");
+    if(!isAuthorized.isAuthorized) {
+        console.warn("Not Allowed");
         redirect("/spaces");
     }
-
+    
     return (
         <section id="space" className="w-screen h-screen overflow-hidden grid" style={{ gridTemplateColumns: "300px auto" }}>
 
@@ -61,7 +68,7 @@ export default async function RootLayout({ children, params }: { children: React
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img alt="Profile Picture" src={session.user?.image || ""} />
+                                    <Image alt="Profile Picture" src={session.user?.image || ""} fill />
                                 </div>
                             </div>
                             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">

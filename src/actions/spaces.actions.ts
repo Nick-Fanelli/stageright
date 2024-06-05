@@ -5,16 +5,13 @@ import connectDB from "@/lib/db";
 import { IUser } from "@/models/user.model";
 import { getUser } from "./user.actions";
 import SpaceModel, { ISpace } from "@/models/space.models";
-import ActionResponse, { ActionResponseCode, getUserAuth } from "./actions";
+import { ILocation, locationSchema } from "@/models/location.model";
+import { authenticationMiddleware, userMiddleware } from "./actionMiddleware";
 
 export const createSpace = async (spaceName: string) : Promise<ISpace | null> => {
 
-    await connectDB();
-
-    const [ session, dbUser ] = await getUserAuth();
-
-    if(!session || !session.user || !dbUser)
-        return null;
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
 
     const space = await SpaceModel.create({ name: spaceName, owner: dbUser.id });
     return await space.save();
@@ -23,12 +20,8 @@ export const createSpace = async (spaceName: string) : Promise<ISpace | null> =>
 
 export const getAllUserSpaces = async () : Promise<ISpace[]> => {
 
-    await connectDB();
-
-    const [ session, dbUser ] = await getUserAuth();
-
-    if(!session || !session.user || !dbUser)
-        return [];
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
 
     return await SpaceModel.find({ owner: dbUser.id }).exec();
 
@@ -41,14 +34,16 @@ type IsUserAuthorizedForSpaceReturnType = {
 
 }
 
-const isUserAuthorizedForSpace = async (userId: IUser['id'], spaceId: ISpace['id']) : Promise<IsUserAuthorizedForSpaceReturnType> => {
+const internalIsUserAuthorizedForSpace = async (userId: IUser['id'], spaceId: ISpace['id']) : Promise<IsUserAuthorizedForSpaceReturnType> => {
+
+    await connectDB();
 
     const space = await SpaceModel.findById(spaceId);
 
     if(!space)
         return { isAuthorized: false };
 
-    if(space.owner.text !== userId.text) {
+    if(String(space.owner) !== String(userId)) {
         return { isAuthorized: false };
     }
 
@@ -59,26 +54,82 @@ const isUserAuthorizedForSpace = async (userId: IUser['id'], spaceId: ISpace['id
 
 }
 
-//Promise<ActionResponse<void>>
+export const isUserAuthorizedForSpace = async (spaceId: ISpace['id']) : Promise<IsUserAuthorizedForSpaceReturnType> => {
 
-export const getSpace = async (id: string) : Promise<ActionResponse<ISpace>> => {
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
 
-    await connectDB();
+    return internalIsUserAuthorizedForSpace(dbUser?.id, spaceId);
 
-    const [ session, dbUser ] = await getUserAuth();
+}
 
-    if(session == null || dbUser == null)
-        return { code: ActionResponseCode.NOT_AUTHENTICATED };
+export const getSpace = async (id: string) : Promise<ISpace> => {
 
-    const result = await isUserAuthorizedForSpace(dbUser?.id, id);
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, id);
 
     if(!result.isAuthorized) {
-        return { code: ActionResponseCode.ACCESS_DENIED };
+        throw new Error("Access Denied");
     }
 
-    return { 
-        code: ActionResponseCode.SUCCESS,
-        payload: result.space
-    };
+    if(!result.space) {
+        throw new Error(`Space by id: ${id} not found!`);
+    }
+
+    return result.space;
+}
+
+// ======================================================================================================================================================
+// Locations
+// ======================================================================================================================================================
+export const getSpaceLocations = async (id: string) : Promise<ILocation[]> => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, id);
+
+    if(!result.isAuthorized) {
+        throw Error("Access Denied");
+    }
+
+    if(!result.space) {
+        throw Error("Unexpected Error")
+    }
+
+    let locations: ILocation[] = [];
+    
+    result.space.locations.forEach((location) => {
+        locations.push({ locationName: location.locationName });        
+    }); 
+
+    return locations;
+
+}
+
+export const createSpaceLocation = async (spaceId: string) : Promise<ISpace> => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    // if(!result.space.locations)
+    //     result.space.locations = [];
+
+    // result.space.locations.push({ locationName: "Test Location" });
+    // const space = await result.space.save();
+
+    // result.space.locations = [...result.space.locations, { locationName: "Test Location" }];
+    // result.space.locations = [...result.space.locations, "Another Location"];
+    result.space.locations = [...result.space.locations, { locationName: "Another Location" }];
+
+    return await result.space.save();
 
 }
