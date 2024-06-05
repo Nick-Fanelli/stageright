@@ -5,6 +5,7 @@ import { SpaceParams } from "../layout";
 import LocationComponent from "./(components)/LocationComponent";
 import LocationsTable from "./(components)/LocationsTable";
 import { Suspense } from "react";
+import LocationsTableSuspense from "./(components)/LocationsTableSuspense";
 
 export const metadata = {
     title: 'Locations | Stage Right',
@@ -44,12 +45,20 @@ const Locations = async ({ params }: { params: SpaceParams }) => {
 
             <div className="w-full h-full overflow-y-hidden flex justify-center items-center">
                 <div className="overflow-x-auto overflow-y-auto bg-base-100 w-11/12 rounded-xl h-full">
-                    <Suspense fallback={<h1>Loading...</h1>}> 
-                    { 
-                    // TODO: ADD FALLBACK
-                     }
-                        <LocationsTable spaceId={params.spaceId} />
-                    </Suspense>
+
+                    <table className="table table-zebra w-full">
+                        <thead>
+                            <tr className="">
+                                <th className="w-full">Location Name</th>
+                                <th className="px-10"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <Suspense fallback={<LocationsTableSuspense />}>
+                                <LocationsTable spaceId={params.spaceId} />
+                            </Suspense>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>

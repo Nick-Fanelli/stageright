@@ -17,21 +17,13 @@ const LocationsTable = async (props: Props) => {
     const locations = await getSpaceLocations(props.spaceId);
 
     return (
-        <table className="table table-zebra w-full">
-            <thead>
-                <tr className="">
-                    <th className="w-full">Location Name</th>
-                    <th className="px-10"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    locations.map((location, index) => (
-                        <LocationComponent key={`location-${location.locationName}${index}`} name={location.locationName} />
-                    ))
-                }
-            </tbody>
-        </table>
+        <>
+            {
+                locations.map((location, index) => (
+                    <LocationComponent key={`location-${location.locationName}${index}`} name={location.locationName} />
+                ))
+            }
+        </>
     )
 
 }
