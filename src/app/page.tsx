@@ -5,6 +5,7 @@ const Page = () => {
     
     return (
         <>
+            <h1>Stage Right</h1>
             <SignInButton />
             <Link href="/spaces">
                 <button className="btn btn-primary">To App</button>
