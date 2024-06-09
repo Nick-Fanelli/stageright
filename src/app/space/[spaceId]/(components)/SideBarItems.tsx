@@ -1,6 +1,5 @@
-import { faBox, faDisplay, faTag } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faDisplay, faSitemap, faTag } from "@fortawesome/free-solid-svg-icons";
 import SideBarItem from "./SideBarItem";
-import { usePathname } from "next/navigation";
 
 type Props = {
 
@@ -18,7 +17,7 @@ const SideBarItems = (props: Props) => {
             <div className="divider">Assets</div>
             <SideBarItem displayName="Assets" icon={faBox} route={generateURL("assets")} />
             <SideBarItem displayName="Locations" icon={faBox} route={generateURL("locations")} />
-            <SideBarItem displayName="Tags" icon={faTag} route={generateURL("tags")} />
+            <SideBarItem displayName="Categories" icon={faSitemap} route={generateURL("categories")} />
             <div className="divider">Access Control</div>
             <SideBarItem displayName="Users" icon={faTag} route={generateURL("users")} />
         </div>
