@@ -27,15 +27,13 @@ const Locations = async ({ params }: { params: SpaceParams }) => {
 
                     </div>
 
-                    <div className="w-40 flex items-center justify-end">
+                    <div className="w-64 flex items-center justify-end">
                         <form action={async () => {
                             "use server";
                             redirect(`/space/${params.spaceId}/locations/new`);
                         }}>
                             <button type="submit" className="btn btn-ghost text-base">New Location</button>
                         </form>
-
-
                     </div>
 
                 </div>

@@ -7,6 +7,7 @@ import { getUser } from "./user.actions";
 import SpaceModel, { ISpace } from "@/models/space.models";
 import { ILocation, locationSchema } from "@/models/location.model";
 import { authenticationMiddleware, userMiddleware } from "./actionMiddleware";
+import { ObjectId } from "mongoose"
 
 export const createSpace = async (spaceName: string) : Promise<ISpace | null> => {
 
@@ -99,13 +100,13 @@ export const getSpaceLocations = async (id: string) : Promise<ILocation[]> => {
         throw Error("Unexpected Error")
     }
 
-    let locations: ILocation[] = [];
+    // let locations: ILocation[] = [];
     
-    result.space.locations.forEach((location) => {
-        locations.push({ locationName: location.locationName });        
-    }); 
+    // result.space.locations.forEach((location) => {
+    //     locations.push({ locationName: location.locationName });        
+    // }); 
 
-    return locations;
+    return result.space.locations;
 
 }
 
@@ -119,9 +120,47 @@ export const createSpaceLocation = async (spaceId: string, locationName: string)
     if(!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
-
+    
     result.space.locations = [...result.space.locations, { locationName: locationName }];
 
     await result.space.save();
+
+}
+
+export const deleteSpaceLocation = async (spaceId: string, locationId: string) : Promise<void> => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    result.space.locations = result.space.locations.filter(location => String(location._id) !== locationId);
+    result.space.save();
+
+}
+
+export const updateSpaceLocation = async (spaceId: string, locationId: string, locationName: string) : Promise<void> => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    const index = result.space.locations.findIndex(location => String(location._id) === locationId);
+
+    if(index == -1) {
+        throw new Error("Unknown location id " + locationId);
+    }
+
+    result.space.locations[index].locationName = locationName;
+    result.space.save();
 
 }

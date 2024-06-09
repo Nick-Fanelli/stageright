@@ -20,7 +20,7 @@ const LocationsTable = async (props: Props) => {
         <>
             {
                 locations.map((location, index) => (
-                    <LocationComponent key={`location-${location.locationName}${index}`} name={location.locationName} />
+                    <LocationComponent key={`location-${location.locationName}${index}${location._id}`} id={location._id} spaceId={props.spaceId} name={location.locationName} />
                 ))
             }
         </>
