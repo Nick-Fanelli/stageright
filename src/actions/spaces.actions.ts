@@ -109,7 +109,7 @@ export const getSpaceLocations = async (id: string) : Promise<ILocation[]> => {
 
 }
 
-export const createSpaceLocation = async (spaceId: string) : Promise<ISpace> => {
+export const createSpaceLocation = async (spaceId: string, locationName: string) : Promise<void> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
@@ -120,16 +120,8 @@ export const createSpaceLocation = async (spaceId: string) : Promise<ISpace> => 
         throw new Error("Access Denied");
     }
 
-    // if(!result.space.locations)
-    //     result.space.locations = [];
+    result.space.locations = [...result.space.locations, { locationName: locationName }];
 
-    // result.space.locations.push({ locationName: "Test Location" });
-    // const space = await result.space.save();
-
-    // result.space.locations = [...result.space.locations, { locationName: "Test Location" }];
-    // result.space.locations = [...result.space.locations, "Another Location"];
-    result.space.locations = [...result.space.locations, { locationName: "Another Location" }];
-
-    return await result.space.save();
+    await result.space.save();
 
 }

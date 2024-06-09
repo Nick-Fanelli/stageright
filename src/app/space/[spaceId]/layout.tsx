@@ -1,11 +1,7 @@
-import { ActionResponseCode } from "@/actions/actions";
-import { getSpace, isUserAuthorizedForSpace } from "@/actions/spaces.actions";
+import { isUserAuthorizedForSpace } from "@/actions/spaces.actions";
 import { auth } from "@/auth";
-import { faBox, faDisplay, faTag } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import SideBarItem from "./(components)/SideBarItem";
-import { cookies, headers } from "next/headers";
 import SideBarItems from "./(components)/SideBarItems";
 import ThemeController from "@/app/components/ThemeController";
 import Image from "next/image";

@@ -1,11 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { createSpaceLocation, getSpaceLocations } from "@/actions/spaces.actions";
 import { SpaceParams } from "../layout";
-import LocationComponent from "./(components)/LocationComponent";
 import LocationsTable from "./(components)/LocationsTable";
 import { Suspense } from "react";
 import LocationsTableSuspense from "./(components)/LocationsTableSuspense";
+import { redirect } from "next/navigation";
 
 export const metadata = {
     title: 'Locations | Stage Right',
@@ -31,8 +30,7 @@ const Locations = async ({ params }: { params: SpaceParams }) => {
                     <div className="w-40 flex items-center justify-end">
                         <form action={async () => {
                             "use server";
-
-                            createSpaceLocation(params.spaceId);
+                            redirect(`/space/${params.spaceId}/locations/new`);
                         }}>
                             <button type="submit" className="btn btn-ghost text-base">New Location</button>
                         </form>
