@@ -1,14 +1,13 @@
-import { deleteSpaceLocation, getSpaceLocations } from "@/actions/spaces.actions"
+import { deleteSpaceLocation, getSpaceLocations, updateSpaceLocation } from "@/actions/spaces.actions"
 import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ObjectId } from "mongoose";
 import { redirect } from "next/navigation";
-import EditLocationForm from "./EditLocationForm";
 
 type Params = {
 
     spaceId: string,
-    locationId: ObjectId
+    locationId: string
 
 }
 
@@ -45,7 +44,33 @@ const EditLocation = async ({ params }: { params: Params }) => {
 
             <div className="mt-10 w-full">
 
-                <EditLocationForm spaceId={params.spaceId} locationId={String(params.locationId)} redirectURL={redirectURL} locationName={spaceLocation.locationName} />
+                <form className="w-full flex flex-col items-center" action={async (formData) => {
+
+                    "use server";
+
+                     const locationName = formData.get("location-name")?.toString();
+
+                     if (!locationName || locationName.trim().length < 0) {
+                         console.error("INVALID");
+                         return;
+                     }
+
+                     await updateSpaceLocation(params.spaceId, params.locationId, locationName);
+
+                    redirect(redirectURL)
+                }}>
+
+                    <label className="form-control w-1/2">
+                        <div className="label"><span className="label-text">Location Name</span></div>
+                        <input type="text" name="location-name" id="location-name" className="input bg-base-100 w-100 text-base-content" defaultValue={spaceLocation.locationName} />
+                    </label>
+
+                    <div className="flex w-full items-center justify-center mt-5">
+                        <button className="btn btn-primary h-[3rem] w-1/2" type="submit">Update</button>
+                    </div>
+
+
+                </form>
 
             </div>
 

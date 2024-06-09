@@ -1,7 +1,6 @@
 "use server";
 
 import { auth } from "@/auth";
-import ActionResponse from "./actions";
 import UserModel, { IUser } from "@/models/user.model";
 import connectDB from "@/lib/db";
 
