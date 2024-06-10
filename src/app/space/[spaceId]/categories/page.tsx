@@ -1,13 +1,16 @@
+import { createDemoCategories } from "@/actions/spaces.actions";
 import { faSitemap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { SpaceParams } from "../layout";
+import CategoriesHierarchy from "./CategoriesHierarchy";
 
 export const metadata = {
     title: 'Categories | Stage Right'
 }
 
-const Categories = async () => {
-
+const Categories = async ({ params } : { params: SpaceParams }) => {
+    
     return (
         <section id="locations" className="absolute top-0 left-0 right-0 bottom-4 overflow-y-hidden p-0 grid" style={{ gridTemplateRows: "7rem auto" }}>
 
@@ -20,6 +23,14 @@ const Categories = async () => {
                             <h1 className="text-xl">Categories</h1>
                         </div>
 
+                        <form action={async () => {
+                            "use server";
+                            await createDemoCategories(params.spaceId);
+                        }}>
+                            <button className="btn btn-primary">Create Demo Categories</button>
+
+                        </form>
+
                     </div>
 
                 </div>
@@ -28,77 +39,7 @@ const Categories = async () => {
             <div className="w-full h-full overflow-y-hidden flex justify-center items-center">
                 <div className="overflow-x-auto overflow-y-auto bg-base-100 w-11/12 rounded-xl h-full">
 
-                    <ul className="menu w-full rounded-box">
-
-                        <li>
-                            <details open className="">
-
-                                <summary className="flex">
-                                    <div className="flex justify-between w-full">
-                                        <p>Test Element</p>
-                                        <div className="flex gap-4 mr-5">
-                                            <Link className="link" href="#">New Sub-Category</Link>
-                                            <Link className="link" href="#">Delete</Link>
-                                        </div>
-                                    </div>
-                                </summary>
-
-                                <ul>
-                                    <li>
-                                        <div className="flex justify-between w-full">
-                                            <p>Test Element</p>
-                                            <div className="flex gap-4 mr-5">
-                                                <Link className="link" href="#">New Sub-Category</Link>
-                                                <Link className="link" href="#">Delete</Link>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="flex justify-between w-full">
-                                            <p>Test Element</p>
-                                            <div className="flex gap-4 mr-5">
-                                                <Link className="link" href="#">New Sub-Category</Link>
-                                                <Link className="link" href="#">Delete</Link>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="flex justify-between w-full">
-                                            <p>Test Element</p>
-                                            <div className="flex gap-4 mr-5">
-                                                <Link className="link" href="#">New Sub-Category</Link>
-                                                <Link className="link" href="#">Delete</Link>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div className="flex justify-between w-full">
-                                            <p className="text-primary">[ Create New Category]</p>
-                                        </div>
-                                    </li>
-
-                                </ul>
-
-                            </details>
-                        </li>
-
-                        <li>
-                            <div className="flex justify-between w-full">
-                                <p>Test Element</p>
-                                <div className="flex gap-4 mr-5">
-                                    <Link className="link" href="#">New Sub-Category</Link>
-                                    <Link className="link" href="#">Delete</Link>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div className="flex justify-between w-full">
-                                <p className="text-primary">[ Create New Category]</p>
-                            </div>
-                        </li>
-                    </ul>
+                    <CategoriesHierarchy spaceId={params.spaceId} />
 
                 </div>
             </div>

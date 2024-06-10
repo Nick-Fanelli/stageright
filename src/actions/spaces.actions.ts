@@ -4,10 +4,11 @@ import { auth } from "@/auth";
 import connectDB from "@/lib/db";
 import { IUser } from "@/models/user.model";
 import { getUser } from "./user.actions";
-import SpaceModel, { ISpace } from "@/models/space.models";
+import SpaceModel, { ISpace } from "@/models/space.model";
 import { ILocation, locationSchema } from "@/models/location.model";
 import { authenticationMiddleware, userMiddleware } from "./actionMiddleware";
 import { ObjectId } from "mongoose"
+import { ICategory } from "@/models/category.model";
 
 export const createSpace = async (spaceName: string) : Promise<ISpace | null> => {
 
@@ -100,12 +101,6 @@ export const getSpaceLocations = async (id: string) : Promise<ILocation[]> => {
         throw Error("Unexpected Error")
     }
 
-    // let locations: ILocation[] = [];
-    
-    // result.space.locations.forEach((location) => {
-    //     locations.push({ locationName: location.locationName });        
-    // }); 
-
     return result.space.locations;
 
 }
@@ -139,7 +134,7 @@ export const deleteSpaceLocation = async (spaceId: string, locationId: string) :
     }
 
     result.space.locations = result.space.locations.filter(location => String(location._id) !== locationId);
-    result.space.save();
+    await result.space.save();
 
 }
 
@@ -161,6 +156,56 @@ export const updateSpaceLocation = async (spaceId: string, locationId: string, l
     }
 
     result.space.locations[index].locationName = locationName;
-    result.space.save();
+    await result.space.save();
+
+}
+
+// ======================================================================================================================================================
+// Categories
+// ======================================================================================================================================================
+export const createDemoCategories = async (spaceId: string) : Promise<void> => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    result.space.categories = [...result.space.categories, { name: "Test" }];
+
+
+    result.space.categories = [
+
+        { name: "Test Element", children: [
+            { name: "Another Test "},
+            { name: "Hey Hey "},
+            { name: "Some Category "},
+            { name: "This one is cool", children: [
+                { name: "Super Nested" }
+            ]}
+        ] },
+        { name: "Final Element "}
+
+    ];
+
+   await result.space.save();
+
+}
+
+export const getSpaceCategories = async (spaceId: string) : Promise<ICategory[]> => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    return result.space.categories;
 
 }
