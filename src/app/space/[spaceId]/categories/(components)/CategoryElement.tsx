@@ -1,6 +1,11 @@
+"use client";
+
+import { CategoryNode, extrapolateHierarchyId } from "../CategoriesHierarchy";
+
 type Props = {
 
-    name: string
+    name: string,
+    node: CategoryNode
 
 }
 

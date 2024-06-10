@@ -8,21 +8,17 @@ export interface ICategory {
 
 }
 
-export const categorySchema = new Schema<ICategory>({
+const categorySchema = new Schema<ICategory>({
 
     name: {
         type: String,
         required: true
     },
 
-    children: [
-        {
-            name: {
-                type: String,
-                required: true,
-            },
-            children: []
-        }
-    ]
-
 });
+
+categorySchema.add({
+    children: [categorySchema]
+});
+
+export { categorySchema };

@@ -8,7 +8,7 @@ import SpaceModel, { ISpace } from "@/models/space.model";
 import { ILocation, locationSchema } from "@/models/location.model";
 import { authenticationMiddleware, userMiddleware } from "./actionMiddleware";
 import { ObjectId } from "mongoose"
-import { ICategory } from "@/models/category.model";
+import { ICategory, categorySchema } from "@/models/category.model";
 
 export const createSpace = async (spaceName: string) : Promise<ISpace | null> => {
 
@@ -174,9 +174,6 @@ export const createDemoCategories = async (spaceId: string) : Promise<void> => {
         throw new Error("Access Denied");
     }
 
-    result.space.categories = [...result.space.categories, { name: "Test" }];
-
-
     result.space.categories = [
 
         { name: "Test Element", children: [
@@ -184,7 +181,9 @@ export const createDemoCategories = async (spaceId: string) : Promise<void> => {
             { name: "Hey Hey "},
             { name: "Some Category "},
             { name: "This one is cool", children: [
-                { name: "Super Nested" }
+                { name: "Super Nested", children: [
+                    { name: "Super SUPER Nested", children: [] }
+                ] }
             ]}
         ] },
         { name: "Final Element "}
@@ -207,5 +206,37 @@ export const getSpaceCategories = async (spaceId: string) : Promise<ICategory[]>
     }
 
     return result.space.categories;
+
+}
+
+export const createSpaceCategory = async (spaceId: string, parents: string[], name: string) => {
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    let targetArray = result.space.categories;
+
+    for(let i = 0; i < parents.length; i++) {
+        const parent = parents[i];
+
+        const index = targetArray.findIndex(curr => String(curr._id) === parent);
+
+        if(index == -1) {
+            break;
+        }
+
+        targetArray = targetArray[index].children || [];
+
+    }
+    
+    targetArray.push({ name: name });
+
+    await result.space.save();
 
 }

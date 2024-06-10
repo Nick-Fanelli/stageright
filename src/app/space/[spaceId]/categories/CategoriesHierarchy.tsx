@@ -1,10 +1,31 @@
-import Link from "next/link";
-import { SpaceParams } from "../layout";
 import { getSpaceCategories } from "@/actions/spaces.actions";
 import { ICategory } from "@/models/category.model";
 import CreateNewCategoryElement from "./(components)/CreateNewCategoryElement";
 import CategoryElement from "./(components)/CategoryElement";
 import TopLevelCategoryElement from "./(components)/TopLevelCategoryElement";
+
+export const revalidate = 0;
+
+export type CategoryNode = {
+    
+    id: string
+    parent: CategoryNode | null
+    
+}
+
+export const extrapolateHierarchyId = (node: CategoryNode) : string[] => {
+
+    const path: string[] = [node.id];
+
+    let currentNode = node.parent;
+
+    while(currentNode != null) {
+        path.push(currentNode.id);
+        currentNode = currentNode.parent;
+    }
+
+    return path.reverse();
+}
 
 type Props = {
 
@@ -12,108 +33,36 @@ type Props = {
 
 }
 
-export const revalidate = 0;
-
 const CategoriesHierarchy = async (props: Props) => {
 
     const categories = await getSpaceCategories(props.spaceId);
 
     let children: React.ReactNode[] = [];
 
-    const categoryToElement = (category: ICategory) : React.ReactNode => {
+    const categoryToElement = (category: ICategory, node: CategoryNode) : React.ReactNode => {
 
         if(category.children && category.children.length > 0) {
             let children: React.ReactNode[] = [];
-            category.children.forEach((cat) => children.push(categoryToElement(cat)));
+            category.children.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
 
-            return <TopLevelCategoryElement name={category.name} children={children} />;
+            return <TopLevelCategoryElement name={category.name} children={children} node={node} spaceId={props.spaceId} />;
         } else {
-            return <CategoryElement name={category.name} />
+            return <CategoryElement name={category.name} node={node} />
         }
 
     }
 
     categories.forEach(cat => {
 
-        children.push(categoryToElement(cat));
+        children.push(categoryToElement(cat, { id: String(cat._id), parent: null }));
 
     });
 
-    children.push(<CreateNewCategoryElement />)
+    children.push(<CreateNewCategoryElement spaceId={props.spaceId} parent={null} />)
 
     return (
         <ul className="menu w-full rounded-box">
-
             {children}
-
-            {/* <li>
-                <details open className="">
-
-                    <summary className="flex">
-                        <div className="flex justify-between w-full">
-                            <p>Test Element</p>
-                            <div className="flex gap-4 mr-5">
-                                <Link className="link" href="#">New Sub-Category</Link>
-                                <Link className="link" href="#">Delete</Link>
-                            </div>
-                        </div>
-                    </summary>
-
-                    <ul>
-                        <li>
-                            <div className="flex justify-between w-full">
-                                <p>Test Element</p>
-                                <div className="flex gap-4 mr-5">
-                                    <Link className="link" href="#">New Sub-Category</Link>
-                                    <Link className="link" href="#">Delete</Link>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="flex justify-between w-full">
-                                <p>Test Element</p>
-                                <div className="flex gap-4 mr-5">
-                                    <Link className="link" href="#">New Sub-Category</Link>
-                                    <Link className="link" href="#">Delete</Link>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="flex justify-between w-full">
-                                <p>Test Element</p>
-                                <div className="flex gap-4 mr-5">
-                                    <Link className="link" href="#">New Sub-Category</Link>
-                                    <Link className="link" href="#">Delete</Link>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div className="flex justify-between w-full">
-                                <p className="text-primary">[ Create New Category]</p>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </details>
-            </li>
-
-            <li>
-                <div className="flex justify-between w-full">
-                    <p>Test Element</p>
-                    <div className="flex gap-4 mr-5">
-                        <Link className="link" href="#">New Sub-Category</Link>
-                        <Link className="link" href="#">Delete</Link>
-                    </div>
-                </div>
-            </li>
-
-            <li>
-                <div className="flex justify-between w-full">
-                    <p className="text-primary">[ Create New Category]</p>
-                </div>
-            </li> */}
         </ul>
     );
 

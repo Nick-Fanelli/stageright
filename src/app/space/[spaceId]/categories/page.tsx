@@ -1,16 +1,16 @@
 import { createDemoCategories } from "@/actions/spaces.actions";
 import { faSitemap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
 import { SpaceParams } from "../layout";
 import CategoriesHierarchy from "./CategoriesHierarchy";
+import { revalidatePath } from "next/cache";
 
 export const metadata = {
     title: 'Categories | Stage Right'
 }
 
-const Categories = async ({ params } : { params: SpaceParams }) => {
-    
+const Categories = async ({ params }: { params: SpaceParams }) => {
+
     return (
         <section id="locations" className="absolute top-0 left-0 right-0 bottom-4 overflow-y-hidden p-0 grid" style={{ gridTemplateRows: "7rem auto" }}>
 
@@ -18,18 +18,22 @@ const Categories = async ({ params } : { params: SpaceParams }) => {
                 <div className="bg-base-100 w-11/12 rounded-xl flex items-center justify-between pr-5 h-20">
                     <div className="h-full w-full flex items-center">
 
-                        <div className="bg-neutral w-44 h-full rounded-tl-xl rounded-bl-xl text-neutral-content flex justify-start items-center mr-5">
+                        <div className="bg-neutral w-48 h-full rounded-tl-xl rounded-bl-xl text-neutral-content flex justify-start items-center mr-5">
                             <FontAwesomeIcon icon={faSitemap} className="size-8 mr-3 ml-3" />
                             <h1 className="text-xl">Categories</h1>
                         </div>
 
-                        <form action={async () => {
-                            "use server";
-                            await createDemoCategories(params.spaceId);
-                        }}>
-                            <button className="btn btn-primary">Create Demo Categories</button>
+                        <div className="flex justify-between w-full">
 
-                        </form>
+                            <form action={async () => {
+                                "use server";
+                                await createDemoCategories(params.spaceId);
+                                revalidatePath(`/space/${params.spaceId}/categories`);
+                            }}>
+                                <button className="btn btn-primary">Create Demo Categories</button>
+
+                            </form>
+                        </div>
 
                     </div>
 
