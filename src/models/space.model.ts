@@ -1,13 +1,14 @@
 import { Document, Model, Schema, model, models } from "mongoose";
 import UserModel from "./user.model";
 import { ILocation, locationSchema } from "./location.model";
-
+import { ICategory, categorySchema } from './category.model';
 
 export interface ISpace extends Document {
 
     name: string,
     owner: Schema.Types.ObjectId,
-    locations: ILocation[]
+    locations: ILocation[],
+    categories: ICategory[],
 
 }
 
@@ -26,8 +27,13 @@ const spaceSchema = new Schema<ISpace>({
 
     locations: {
         type: [locationSchema],
-        required: true
-    }
+        required: true,
+    },
+
+    categories: {
+        type: [categorySchema],
+        required: true,
+    },
 
 }, { timestamps: true });
 

@@ -12,7 +12,7 @@ type Props = {
 
 }
 
-const LocationComponent = async (props: Props) => {
+const LocationComponent = (props: Props) => {
 
     const router = useRouter();
 
