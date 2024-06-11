@@ -1,6 +1,6 @@
 "use client";
 
-import { CategoryNode, extrapolateHierarchyId } from "../CategoriesHierarchy";
+import { CategoryNode, extrapolateParents } from "../CategoriesHierarchy";
 import CreateNewCategoryElement from "./CreateNewCategoryElement";
 
 type Props = {

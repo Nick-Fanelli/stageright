@@ -240,3 +240,45 @@ export const createSpaceCategory = async (spaceId: string, parents: string[], na
     await result.space.save();
 
 }
+
+export const deleteSpaceCategory = async (spaceId: string, parents: string[]) => {
+
+
+    const session = await authenticationMiddleware();
+    const dbUser = await userMiddleware(session);
+
+    const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
+
+    if(!result.isAuthorized || !result.space) {
+        throw new Error("Access Denied");
+    }
+
+    const id = parents.pop();
+
+    let targetArray = result.space.categories;
+
+    for(let i = 0; i < parents.length; i++) {
+        const parent = parents[i];
+
+        const index = targetArray.findIndex(curr => String(curr._id) === parent);
+
+        if(index == -1) {
+            break;
+        }
+
+        
+        targetArray = targetArray[index].children || [];
+
+    }
+
+    const index = targetArray.findIndex(cat => String(cat._id) === id);
+
+    if(index == -1) {
+        throw new Error("Could not find category to delete");
+    }
+
+    targetArray.splice(index, 1);
+
+    await result.space.save();
+
+}
