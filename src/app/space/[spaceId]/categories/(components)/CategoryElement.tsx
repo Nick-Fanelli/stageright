@@ -21,7 +21,12 @@ const CategoryElement = (props: Props) => {
             <div className="flex justify-between w-full">
                 <p>{props.name}</p>
                 <div className="flex gap-4 mr-5">
-                    <p className="link">New Sub-Category</p>
+                    <p className="link" onClick={async () => {
+                        
+                        const parentHierarchy: string[] = extrapolateParents(props.node);
+                        router.push(`/space/${props.spaceId}/categories/new?parent=${parentHierarchy}`);
+
+                    }}>New Sub-Category</p>
                     <p className="link" onClick={async () => {
 
                         const confirmation = window.confirm("Are you sure you want to delete this category with all of its sub-categories?");
