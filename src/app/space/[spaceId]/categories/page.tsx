@@ -1,5 +1,5 @@
 import { createDemoCategories } from "@/actions/spaces.actions";
-import { faSitemap } from "@fortawesome/free-solid-svg-icons";
+import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SpaceParams } from "../layout";
 import CategoriesHierarchy from "./CategoriesHierarchy";
@@ -19,7 +19,7 @@ const Categories = async ({ params }: { params: SpaceParams }) => {
                     <div className="h-full w-full flex items-center">
 
                         <div className="bg-neutral w-48 h-full rounded-tl-xl rounded-bl-xl text-neutral-content flex justify-start items-center mr-5">
-                            <FontAwesomeIcon icon={faSitemap} className="size-8 mr-3 ml-3" />
+                            <FontAwesomeIcon icon={faTags} className="size-8 mr-3 ml-3" />
                             <h1 className="text-xl">Categories</h1>
                         </div>
 
