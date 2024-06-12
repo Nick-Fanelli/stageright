@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CategoryNode, extrapolateHierarchyId } from "../CategoriesHierarchy";
+import { CategoryNode, extrapolateParents } from "../CategoriesHierarchy";
 
 type Props = {
 
@@ -17,7 +17,7 @@ const CreateNewCategoryElement = (props: Props) => {
     return (
         <li onClick={() => {
 
-            const parentHierarchy: string[] = props.parent ? extrapolateHierarchyId(props.parent) : [];
+            const parentHierarchy: string[] = props.parent ? extrapolateParents(props.parent) : [];
 
             router.push(`/space/${props.spaceId}/categories/new?parent=${parentHierarchy}`);
         }}>

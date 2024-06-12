@@ -13,7 +13,7 @@ export type CategoryNode = {
     
 }
 
-export const extrapolateHierarchyId = (node: CategoryNode) : string[] => {
+export const extrapolateParents = (node: CategoryNode) : string[] => {
 
     const path: string[] = [node.id];
 
@@ -47,7 +47,7 @@ const CategoriesHierarchy = async (props: Props) => {
 
             return <TopLevelCategoryElement name={category.name} children={children} node={node} spaceId={props.spaceId} />;
         } else {
-            return <CategoryElement name={category.name} node={node} />
+            return <CategoryElement name={category.name} spaceId={props.spaceId} node={node} />
         }
 
     }
