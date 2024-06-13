@@ -45,7 +45,7 @@ const CategoriesHierarchy = async (props: Props) => {
             let children: React.ReactNode[] = [];
             category.children.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
 
-            return <TopLevelCategoryElement name={category.name} children={children} node={node} spaceId={props.spaceId} />;
+            return <TopLevelCategoryElement name={category.name} node={node} spaceId={props.spaceId}>{children}</TopLevelCategoryElement>;
         } else {
             return <CategoryElement name={category.name} spaceId={props.spaceId} node={node} />
         }
