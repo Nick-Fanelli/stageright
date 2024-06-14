@@ -26,7 +26,13 @@ export const userMiddleware = async (session: Session) => {
     const user = await UserModel.findOne({ email: session.user?.email });
 
     if(!user) {
-        throw new Error("Error fetching user");
+
+        if(!session.user || !session.user.email) {
+            throw new Error("Invalid user session");
+        }
+
+        const newUser = await UserModel.create({ email: session.user.email });
+        return await newUser.save();
     }
 
     return user;
