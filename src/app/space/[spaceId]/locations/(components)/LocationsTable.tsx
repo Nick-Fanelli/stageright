@@ -14,7 +14,15 @@ type Props = {
 
 const LocationsTable = async (props: Props) => {
 
-    const locations = await getSpaceLocations(props.spaceId);
+    let locations = await getSpaceLocations(props.spaceId);
+
+    locations.sort((a, b) => {
+        if(a.locationName > b.locationName)
+            return 1;
+        if(a.locationName < b.locationName)
+            return -1;
+        return 0;
+    });
 
     return (
         <>

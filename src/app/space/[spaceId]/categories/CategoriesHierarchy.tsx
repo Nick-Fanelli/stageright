@@ -35,7 +35,13 @@ type Props = {
 
 const CategoriesHierarchy = async (props: Props) => {
 
-    const categories = await getSpaceCategories(props.spaceId);
+    const categories = (await getSpaceCategories(props.spaceId)).sort((a, b) => {
+        if(a.name > b.name)
+            return 1;
+        if(a.name < b.name)
+            return -1;
+        return 0;
+    });
 
     let children: React.ReactNode[] = [];
 
@@ -43,11 +49,20 @@ const CategoriesHierarchy = async (props: Props) => {
 
         if(category.children && category.children.length > 0) {
             let children: React.ReactNode[] = [];
-            category.children.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
 
-            return <TopLevelCategoryElement name={category.name} node={node} spaceId={props.spaceId}>{children}</TopLevelCategoryElement>;
+            let sortedCatChildren = category.children.sort((a, b) => {
+                if(a.name > b.name)
+                    return 1;
+                if(a.name < b.name)
+                    return -1;
+                return 0;
+            });
+
+            sortedCatChildren.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
+
+            return <TopLevelCategoryElement key={JSON.stringify(category)} name={category.name} node={node} spaceId={props.spaceId}>{children}</TopLevelCategoryElement>;
         } else {
-            return <CategoryElement name={category.name} spaceId={props.spaceId} node={node} />
+            return <CategoryElement name={category.name} spaceId={props.spaceId} node={node} key={String(category._id)} />
         }
 
     }
@@ -58,7 +73,7 @@ const CategoriesHierarchy = async (props: Props) => {
 
     });
 
-    children.push(<CreateNewCategoryElement spaceId={props.spaceId} parent={null} />)
+    children.push(<CreateNewCategoryElement spaceId={props.spaceId} parent={null} key={"base new cat"} />)
 
     return (
         <ul className="menu w-full rounded-box">

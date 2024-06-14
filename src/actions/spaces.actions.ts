@@ -10,7 +10,7 @@ import { authenticationMiddleware, userMiddleware } from "./actionMiddleware";
 import { ObjectId } from "mongoose"
 import { ICategory, categorySchema } from "@/models/category.model";
 
-export const createSpace = async (spaceName: string) : Promise<ISpace | null> => {
+export const createSpace = async (spaceName: string): Promise<ISpace | null> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
@@ -20,7 +20,7 @@ export const createSpace = async (spaceName: string) : Promise<ISpace | null> =>
 
 }
 
-export const getAllUserSpaces = async () : Promise<ISpace[]> => {
+export const getAllUserSpaces = async (): Promise<ISpace[]> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
@@ -36,16 +36,16 @@ type IsUserAuthorizedForSpaceReturnType = {
 
 }
 
-const internalIsUserAuthorizedForSpace = async (userId: IUser['id'], spaceId: ISpace['id']) : Promise<IsUserAuthorizedForSpaceReturnType> => {
+const internalIsUserAuthorizedForSpace = async (userId: IUser['id'], spaceId: ISpace['id']): Promise<IsUserAuthorizedForSpaceReturnType> => {
 
     await connectDB();
 
     const space = await SpaceModel.findById(spaceId);
 
-    if(!space)
+    if (!space)
         return { isAuthorized: false };
 
-    if(String(space.owner) !== String(userId)) {
+    if (String(space.owner) !== String(userId)) {
         return { isAuthorized: false };
     }
 
@@ -56,7 +56,7 @@ const internalIsUserAuthorizedForSpace = async (userId: IUser['id'], spaceId: IS
 
 }
 
-export const isUserAuthorizedForSpace = async (spaceId: ISpace['id']) : Promise<IsUserAuthorizedForSpaceReturnType> => {
+export const isUserAuthorizedForSpace = async (spaceId: ISpace['id']): Promise<IsUserAuthorizedForSpaceReturnType> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
@@ -65,18 +65,18 @@ export const isUserAuthorizedForSpace = async (spaceId: ISpace['id']) : Promise<
 
 }
 
-export const getSpace = async (id: string) : Promise<ISpace> => {
+export const getSpace = async (id: string): Promise<ISpace> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, id);
 
-    if(!result.isAuthorized) {
+    if (!result.isAuthorized) {
         throw new Error("Access Denied");
     }
 
-    if(!result.space) {
+    if (!result.space) {
         throw new Error(`Space by id: ${id} not found!`);
     }
 
@@ -86,18 +86,18 @@ export const getSpace = async (id: string) : Promise<ISpace> => {
 // ======================================================================================================================================================
 // Locations
 // ======================================================================================================================================================
-export const getSpaceLocations = async (id: string) : Promise<ILocation[]> => {
+export const getSpaceLocations = async (id: string): Promise<ILocation[]> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, id);
 
-    if(!result.isAuthorized) {
+    if (!result.isAuthorized) {
         throw Error("Access Denied");
     }
 
-    if(!result.space) {
+    if (!result.space) {
         throw Error("Unexpected Error")
     }
 
@@ -105,31 +105,31 @@ export const getSpaceLocations = async (id: string) : Promise<ILocation[]> => {
 
 }
 
-export const createSpaceLocation = async (spaceId: string, locationName: string) : Promise<void> => {
+export const createSpaceLocation = async (spaceId: string, locationName: string): Promise<void> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
-    
+
     result.space.locations = [...result.space.locations, { locationName: locationName }];
 
     await result.space.save();
 
 }
 
-export const deleteSpaceLocation = async (spaceId: string, locationId: string) : Promise<void> => {
+export const deleteSpaceLocation = async (spaceId: string, locationId: string): Promise<void> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
 
@@ -138,20 +138,20 @@ export const deleteSpaceLocation = async (spaceId: string, locationId: string) :
 
 }
 
-export const updateSpaceLocation = async (spaceId: string, locationId: string, locationName: string) : Promise<void> => {
+export const updateSpaceLocation = async (spaceId: string, locationId: string, locationName: string): Promise<void> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
 
     const index = result.space.locations.findIndex(location => String(location._id) === locationId);
 
-    if(index == -1) {
+    if (index == -1) {
         throw new Error("Unknown location id " + locationId);
     }
 
@@ -163,45 +163,221 @@ export const updateSpaceLocation = async (spaceId: string, locationId: string, l
 // ======================================================================================================================================================
 // Categories
 // ======================================================================================================================================================
-export const createDemoCategories = async (spaceId: string) : Promise<void> => {
+export const createDemoCategories = async (spaceId: string): Promise<void> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
 
     result.space.categories = [
-
-        { name: "Test Element", children: [
-            { name: "Another Test "},
-            { name: "Hey Hey "},
-            { name: "Some Category "},
-            { name: "This one is cool", children: [
-                { name: "Super Nested", children: [
-                    { name: "Super SUPER Nested", children: [] }
-                ] }
-            ]}
-        ] },
-        { name: "Final Element "}
-
+        {
+            name: "Motorcycles", children: [
+                {
+                    name: "Cruiser", children: []
+                },
+                {
+                    name: "Sportster", children: []
+                },
+                {
+                    name: "Softail", children: [
+                    ]
+                },{
+                    name: "Dyna", children: [
+                    ]
+                },
+                {
+                    name: "Trike", children: [
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Parts", children: [
+                {
+                    name: "Engine Components", children: [
+                        { name: "Air Cleaners" },
+                        { name: "Carburetors" },
+                        { name: "Fuel Injectors" },
+                        { name: "Gaskets & Seals" },
+                        { name: "Pistons & Cylinders" }
+                    ]
+                },
+                {
+                    name: "Electrical", children: [
+                        { name: "Batteries" },
+                        { name: "Starters" },
+                        { name: "Alternators" },
+                        { name: "Ignition Systems" },
+                        { name: "Wiring Harnesses" }
+                    ]
+                },
+                {
+                    name: "Exhaust", children: [
+                        { name: "Full Systems" },
+                        { name: "Slip-Ons" },
+                        { name: "Headers" },
+                        { name: "Mufflers" },
+                        { name: "Heat Shields" }
+                    ]
+                },
+                {
+                    name: "Brakes", children: [
+                        { name: "Brake Pads" },
+                        { name: "Brake Rotors" },
+                        { name: "Brake Lines" },
+                        { name: "Master Cylinders" }
+                    ]
+                },
+                {
+                    name: "Suspension", children: [
+                        { name: "Forks" },
+                        { name: "Shocks" },
+                        { name: "Springs" },
+                        { name: "Swingarms" }
+                    ]
+                },
+                {
+                    name: "Transmission", children: [
+                        { name: "Clutches" },
+                        { name: "Gearboxes" },
+                        { name: "Belts & Chains" },
+                        { name: "Shift Levers" }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Accessories", children: [
+                {
+                    name: "Riding Gear", children: [
+                        { name: "Helmets" },
+                        { name: "Jackets" },
+                        { name: "Gloves" },
+                        { name: "Boots" },
+                        { name: "Riding Pants" }
+                    ]
+                },
+                {
+                    name: "Luggage", children: [
+                        { name: "Saddlebags" },
+                        { name: "Tank Bags" },
+                        { name: "Tail Bags" },
+                        { name: "Backpacks" }
+                    ]
+                },
+                {
+                    name: "Electronics", children: [
+                        { name: "GPS Systems" },
+                        { name: "Audio Systems" },
+                        { name: "Communication Devices" },
+                        { name: "Mounts & Holders" }
+                    ]
+                },
+                {
+                    name: "Custom Accessories", children: [
+                        { name: "Mirrors" },
+                        { name: "Handlebars" },
+                        { name: "Foot Pegs" },
+                        { name: "Grips" }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Maintenance", children: [
+                {
+                    name: "Oils & Fluids", children: [
+                        { name: "Engine Oil" },
+                        { name: "Transmission Fluid" },
+                        { name: "Brake Fluid" },
+                        { name: "Coolant" }
+                    ]
+                },
+                {
+                    name: "Tools", children: [
+                        { name: "Wrenches" },
+                        { name: "Sockets" },
+                        { name: "Screwdrivers" },
+                        { name: "Specialty Tools" }
+                    ]
+                },
+                {
+                    name: "Cleaning Supplies", children: [
+                        { name: "Wash & Wax" },
+                        { name: "Polishes" },
+                        { name: "Detailing Kits" },
+                        { name: "Brushes & Sponges" }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Tires & Wheels", children: [
+                {
+                    name: "Tires", children: [
+                        { name: "Front Tires" },
+                        { name: "Rear Tires" },
+                        { name: "Dual Sport Tires" },
+                        { name: "Racing Tires" }
+                    ]
+                },
+                {
+                    name: "Wheels", children: [
+                        { name: "Alloy Wheels" },
+                        { name: "Spoked Wheels" },
+                        { name: "Wheel Accessories" },
+                        { name: "Hubcaps" }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Apparel", children: [
+                {
+                    name: "Men's Apparel", children: [
+                        { name: "T-Shirts" },
+                        { name: "Hoodies" },
+                        { name: "Caps" },
+                        { name: "Vests" }
+                    ]
+                },
+                {
+                    name: "Women's Apparel", children: [
+                        { name: "T-Shirts" },
+                        { name: "Hoodies" },
+                        { name: "Caps" },
+                        { name: "Vests" }
+                    ]
+                },
+                {
+                    name: "Kid's Apparel", children: [
+                        { name: "T-Shirts" },
+                        { name: "Hoodies" },
+                        { name: "Caps" }
+                    ]
+                }
+            ]
+        }
     ];
 
-   await result.space.save();
+
+    await result.space.save();
 
 }
 
-export const getSpaceCategories = async (spaceId: string) : Promise<ICategory[]> => {
+export const getSpaceCategories = async (spaceId: string): Promise<ICategory[]> => {
 
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
 
@@ -216,25 +392,25 @@ export const createSpaceCategory = async (spaceId: string, parents: string[], na
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
 
     let targetArray = result.space.categories;
 
-    for(let i = 0; i < parents.length; i++) {
+    for (let i = 0; i < parents.length; i++) {
         const parent = parents[i];
 
         const index = targetArray.findIndex(curr => String(curr._id) === parent);
 
-        if(index == -1) {
+        if (index == -1) {
             break;
         }
 
         targetArray = targetArray[index].children || [];
 
     }
-    
+
     targetArray.push({ name: name });
 
     await result.space.save();
@@ -249,7 +425,7 @@ export const deleteSpaceCategory = async (spaceId: string, parents: string[]) =>
 
     const result = await internalIsUserAuthorizedForSpace(dbUser.id, spaceId);
 
-    if(!result.isAuthorized || !result.space) {
+    if (!result.isAuthorized || !result.space) {
         throw new Error("Access Denied");
     }
 
@@ -257,23 +433,23 @@ export const deleteSpaceCategory = async (spaceId: string, parents: string[]) =>
 
     let targetArray = result.space.categories;
 
-    for(let i = 0; i < parents.length; i++) {
+    for (let i = 0; i < parents.length; i++) {
         const parent = parents[i];
 
         const index = targetArray.findIndex(curr => String(curr._id) === parent);
 
-        if(index == -1) {
+        if (index == -1) {
             break;
         }
 
-        
+
         targetArray = targetArray[index].children || [];
 
     }
 
     const index = targetArray.findIndex(cat => String(cat._id) === id);
 
-    if(index == -1) {
+    if (index == -1) {
         throw new Error("Could not find category to delete");
     }
 
