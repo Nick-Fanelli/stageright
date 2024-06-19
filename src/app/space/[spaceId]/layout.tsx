@@ -1,10 +1,10 @@
-import { isUserAuthorizedForSpace } from "@/actions/spaces.actions";
 import { auth } from "@/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SideBarItems from "./(components)/SideBarItems";
 import ThemeController from "@/app/components/ThemeController";
 import Image from "next/image";
+import { isUserAuthorizedForSpace } from "@/actions/spaces.actions";
 
 export const metadata = {
     title: 'Space | Stage Right',
@@ -32,8 +32,8 @@ export default async function RootLayout({ children, params }: { children: React
 
     const isAuthorized = await isUserAuthorizedForSpace(params.spaceId);
 
-    if(!isAuthorized.isAuthorized) {
-        console.warn("Not Allowed");
+    if(!isAuthorized) {
+        console.warn("Access Denied");
         redirect("/spaces");
     }
     

@@ -2,39 +2,38 @@
 
 import { auth } from "@/auth";
 import connectDB from "@/lib/db";
-import UserModel from "@/models/user.model";
+import UserModel, { IUser } from "@/models/user.model";
 import { Session } from "next-auth";
 
-export const authenticationMiddleware = async () => {
+export const actionMiddleware = async (middlewareCallbacks?: [() => Promise<boolean>]): Promise<[Session, IUser]> => {
 
     await connectDB();
 
     const session = await auth();
 
-    if(!session || !session.user || !session.user.email) {
+    if (!session || !session.user || !session.user.email) {
         throw new Error("Not Authenticated");
     }
 
-    return session;
+    let user = await UserModel.findOne({ email: session.user?.email });
 
-}
+    if (!user) {
 
-export const userMiddleware = async (session: Session) => {
+        const newUserModel = await UserModel.create({ email: session.user.email });
+        user = await newUserModel.save();
 
-    await connectDB();
-
-    const user = await UserModel.findOne({ email: session.user?.email });
-
-    if(!user) {
-
-        if(!session.user || !session.user.email) {
-            throw new Error("Invalid user session");
-        }
-
-        const newUser = await UserModel.create({ email: session.user.email });
-        return await newUser.save();
     }
 
-    return user;
+    if (middlewareCallbacks) {
+        middlewareCallbacks.forEach(async callback => {
+            const result = await callback();
+
+            if (!result) {
+                throw new Error("Failed middleware callback");
+            }
+        });
+    }
+
+    return [session, user];
 
 }
