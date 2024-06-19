@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import AssetsTable from "./(components)/AssetsTable";
 import { SpaceParams } from "../layout";
 
-const Assets = (params: SpaceParams) => {
+const Assets = ({ params } : { params: SpaceParams }) => {
 
     return (
         <section id="assets" className="absolute top-0 left-0 right-0 bottom-0 overflow-y-hidden p-0 grid" style={{ gridTemplateRows: "7rem auto 4rem" }}>
