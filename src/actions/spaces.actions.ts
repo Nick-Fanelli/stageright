@@ -419,7 +419,6 @@ export const createSpaceCategory = async (spaceId: string, parents: string[], na
 
 export const deleteSpaceCategory = async (spaceId: string, parents: string[]) => {
 
-
     const session = await authenticationMiddleware();
     const dbUser = await userMiddleware(session);
 

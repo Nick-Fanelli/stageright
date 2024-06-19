@@ -38,7 +38,7 @@ const EditLocation = async ({ params }: { params: Params }) => {
                         </button>
                     </form>
                 </div>
-                <h1 className="text-4xl">Create New Location</h1>
+                <h1 className="text-4xl">Edit Location</h1>
                 <div className="w-5"></div>
             </div>
 

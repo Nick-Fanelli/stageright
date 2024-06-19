@@ -18,7 +18,7 @@ const LocationComponent = (props: Props) => {
 
     return (
         <tr className="hover">
-            <th>{props.name}</th>
+            <td>{props.name}</td>
             <td className="flex gap-3">
                 <Link className="link" href={`/space/${props.spaceId}/locations/edit/${props.id}`}>Edit</Link>
                 <p className="link" onClick={async () => {
