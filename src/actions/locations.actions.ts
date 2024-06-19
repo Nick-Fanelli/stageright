@@ -1,3 +1,5 @@
+"use server";
+
 import { ILocation } from "@/models/location.model";
 import { getSpace } from "./spaces.actions";
 

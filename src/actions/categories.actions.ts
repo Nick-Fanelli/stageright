@@ -1,3 +1,5 @@
+"use server";
+
 import { ICategory } from "@/models/category.model";
 import { getSpace } from "./spaces.actions";
 

@@ -21,8 +21,8 @@ const SideBarItems = (props: Props) => {
             <SideBarItem displayName="Categories" icon={faList} route={generateURL("categories")} />
             <SideBarItem displayName="Tags" icon={faTags} route={generateURL("tags")} />
             <SideBarItem displayName="Locations" icon={faLocationDot} route={generateURL("locations")} />
-            <div className="divider">Space Admin</div>
-            <SideBarItem displayName="Access Control" icon={faIdBadge} route={generateURL("accessControl")} />
+            <div className="divider">Admin</div>
+            <SideBarItem displayName="Access" icon={faIdBadge} route={generateURL("access")} />
             <SideBarItem displayName="Billing" icon={faMoneyCheck} route={generateURL("billing")} />
         </div>
     );

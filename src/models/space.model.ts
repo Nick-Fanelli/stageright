@@ -2,6 +2,7 @@ import { Document, Model, Schema, model, models } from "mongoose";
 import UserModel from "./user.model";
 import { ILocation, locationSchema } from "./location.model";
 import { ICategory, categorySchema } from './category.model';
+import { IAccess, accessSchema } from "./access.model";
 
 export interface ISpace extends Document {
 
@@ -9,6 +10,7 @@ export interface ISpace extends Document {
     owner: Schema.Types.ObjectId,
     locations: ILocation[],
     categories: ICategory[],
+    access: IAccess[]
 
 }
 
@@ -34,6 +36,11 @@ const spaceSchema = new Schema<ISpace>({
         type: [categorySchema],
         required: true,
     },
+
+    access: {
+        type: [accessSchema],
+        required: true,
+    }
 
 }, { timestamps: true });
 
