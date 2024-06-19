@@ -38,7 +38,8 @@ const Assets = ({ params } : { params: SpaceParams }) => {
                     <table className="table table-zebra w-full">
                         <thead>
                             <tr className="">
-                                <th className="w-6/12">Asset Name</th>
+                                <th className="w-3/12">Asset Name</th>
+                                <th className="w-3/12">Asset Tag ID</th>
                                 <th className="w-3/12">Category</th>
                                 <th className="w-3/12">Location</th>
                                 <th className="px-10"></th>

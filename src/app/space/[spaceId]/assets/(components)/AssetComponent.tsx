@@ -16,6 +16,7 @@ const AssetComponent = (props: Props) => {
     return (
         <tr className="hover">
             <td>{props.name}</td>
+            <td>Some ID</td>
             <td>
                 <div className="text-sm breadcrumbs h-full p-0">
                     <ul>
