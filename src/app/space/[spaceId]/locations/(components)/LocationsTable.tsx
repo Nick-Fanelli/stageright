@@ -1,7 +1,7 @@
 import { ILocation } from "@/models/location.model";
 import { useEffect, useOptimistic, useState } from "react";
 import LocationComponent from "./LocationComponent";
-import { getSpaceLocations } from "@/actions/spaces.actions";
+import { getSpaceLocations } from "@/actions/locations.actions";
 import { auth } from "@/auth";
 
 export const revalidate = 0;

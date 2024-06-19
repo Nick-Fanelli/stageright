@@ -1,4 +1,4 @@
-import { getSpaceCategories } from "@/actions/spaces.actions";
+import { getSpaceCategories } from "@/actions/categories.actions";
 import { ICategory } from "@/models/category.model";
 import CreateNewCategoryElement from "./(components)/CreateNewCategoryElement";
 import CategoryElement from "./(components)/CategoryElement";

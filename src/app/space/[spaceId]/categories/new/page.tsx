@@ -1,4 +1,4 @@
-import { createSpaceCategory, getSpaceCategories } from "@/actions/spaces.actions";
+import { createSpaceCategory, getSpaceCategories } from "@/actions/categories.actions";
 import { SpaceParams } from "../../layout";
 import { redirect, useSearchParams } from "next/navigation";
 import { ICategory } from "@/models/category.model";

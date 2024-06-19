@@ -1,4 +1,4 @@
-import { deleteSpaceLocation, getSpaceLocations, updateSpaceLocation } from "@/actions/spaces.actions"
+import { getSpaceLocations, updateSpaceLocation } from "@/actions/locations.actions";
 import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ObjectId } from "mongoose";

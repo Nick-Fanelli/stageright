@@ -1,4 +1,4 @@
-import { createSpaceLocation } from "@/actions/spaces.actions";
+import { createSpaceLocation } from "@/actions/locations.actions";
 import { faLessThan, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SpaceParams } from "../../layout";

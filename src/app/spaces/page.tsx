@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useAuthorizedMiddleware } from "@/lib/middleware";
-import { getUser } from "@/actions/user.actions";
 import Spaces from "./Spaces";
 import ThemeController from "../components/ThemeController";
 import Image from "next/image";
