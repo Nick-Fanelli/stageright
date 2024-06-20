@@ -29,7 +29,8 @@ export const extrapolateParents = (node: CategoryNode) : string[] => {
 
 type Props = {
 
-    spaceId: string
+    spaceId: string,
+    select?: boolean
 
 }
 
@@ -60,9 +61,9 @@ const CategoriesHierarchy = async (props: Props) => {
 
             sortedCatChildren.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
 
-            return <TopLevelCategoryElement key={JSON.stringify(category)} name={category.name} node={node} spaceId={props.spaceId}>{children}</TopLevelCategoryElement>;
+            return <TopLevelCategoryElement key={JSON.stringify(category)} name={category.name} node={node} spaceId={props.spaceId} select={props.select}>{children}</TopLevelCategoryElement>;
         } else {
-            return <CategoryElement name={category.name} spaceId={props.spaceId} node={node} key={String(category._id)} />
+            return <CategoryElement name={category.name} spaceId={props.spaceId} node={node} key={String(category._id)} select={props.select} />
         }
 
     }
@@ -73,7 +74,8 @@ const CategoriesHierarchy = async (props: Props) => {
 
     });
 
-    children.push(<CreateNewCategoryElement spaceId={props.spaceId} parent={null} key={"base new cat"} />)
+    if(!props.select)
+        children.push(<CreateNewCategoryElement spaceId={props.spaceId} parent={null} key={"base new cat"} />)
 
     return (
         <ul className="menu w-full rounded-box">

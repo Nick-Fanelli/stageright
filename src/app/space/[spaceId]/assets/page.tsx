@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Suspense } from "react";
 import AssetsTable from "./(components)/AssetsTable";
 import { SpaceParams } from "../layout";
+import { redirect } from "next/navigation";
 
 const Assets = ({ params } : { params: SpaceParams }) => {
 
@@ -23,7 +24,7 @@ const Assets = ({ params } : { params: SpaceParams }) => {
                     <div className="w-64 flex items-center justify-end">
                         <form action={async () => {
                             "use server";
-                            // redirect(`/space/${params.spaceId}/locations/new`);
+                            redirect(`/space/${params.spaceId}/assets/new`);
                         }}>
                             <button type="submit" className="btn btn-ghost text-base">New Asset(s)</button>
                         </form>

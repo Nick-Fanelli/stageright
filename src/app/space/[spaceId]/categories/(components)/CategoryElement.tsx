@@ -9,6 +9,7 @@ type Props = {
     name: string,
     spaceId: string
     node: CategoryNode
+    select?: boolean
 
 }
 
@@ -17,28 +18,38 @@ const CategoryElement = (props: Props) => {
     const router = useRouter();
 
     return (
-        <li>
+        <li onClick={(e) => {
+            if(props.select)
+                (document.getElementById("cat_modal_form") as HTMLFormElement)?.requestSubmit();
+            e.stopPropagation();
+        }}>
             <div className="flex justify-between w-full">
                 <p>{props.name}</p>
                 <div className="flex gap-4 mr-5">
-                    <p className="link" onClick={async () => {
-                        
-                        const parentHierarchy: string[] = extrapolateParents(props.node);
-                        router.push(`/space/${props.spaceId}/categories/new?parent=${parentHierarchy}`);
+                    {
+                        props.select ||
+                        <>
+                            <p className="link" onClick={async () => {
 
-                    }}>New Sub-Category</p>
-                    <p className="link" onClick={async () => {
+                                const parentHierarchy: string[] = extrapolateParents(props.node);
+                                router.push(`/space/${props.spaceId}/categories/new?parent=${parentHierarchy}`);
 
-                        const confirmation = window.confirm("Are you sure you want to delete this category with all of its sub-categories?");
+                            }}>New Sub-Category</p>
+                            <p className="link" onClick={async () => {
 
-                        if(confirmation) {
+                                const confirmation = window.confirm("Are you sure you want to delete this category with all of its sub-categories?");
 
-                            await deleteSpaceCategory(props.spaceId, extrapolateParents(props.node));
-                            router.refresh();
+                                if (confirmation) {
 
-                        }
+                                    await deleteSpaceCategory(props.spaceId, extrapolateParents(props.node));
+                                    router.refresh();
 
-                    }}>Delete</p>
+                                }
+
+                            }}>Delete</p>
+                        </>
+                    }
+
                 </div>
             </div>
         </li>
