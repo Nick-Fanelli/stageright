@@ -1,4 +1,4 @@
-import { faBox, faBoxesStacked, faLocationDot, faLocationPin, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faBoxesStacked, faList, faLocationDot, faLocationPin, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SpaceParams } from "../layout";
 import { getSpace } from "@/actions/spaces.actions";
@@ -47,7 +47,7 @@ const Dashboard = async ({ params }: { params: SpaceParams}) => {
                                 <FontAwesomeIcon icon={faUsers} className="text-4xl" />
                             </div>
                             <div className="stat-title">Users</div>
-                            <div className="stat-value">3</div>
+                            <div className="stat-value">{space.access.length + 1}</div>
                             <div className="stat-desc">0 remaining</div>
                         </div>
 
@@ -62,16 +62,14 @@ const Dashboard = async ({ params }: { params: SpaceParams}) => {
                             </div>
                             <div className="stat-title">Locations</div>
                             <div className="stat-value">{space.locations.length}</div>
-                            <div className="stat-desc"></div>
                         </div>
 
                         <div className="stat">
                             <div className="stat-figure">
-                                <FontAwesomeIcon icon={faBoxesStacked} className="text-4xl" />
+                                <FontAwesomeIcon icon={faList} className="text-4xl" />
                             </div>
                             <div className="stat-title">Categories</div>
                             <div className="stat-value">{space.categories.length}</div>
-                            <div className="stat-desc">10 types remaining</div>
                         </div>
 
                         <div className="stat">
