@@ -1,4 +1,7 @@
 import { auth, signIn, signOut } from "@/auth";
+import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { redirect } from "next/navigation";
 
 const SignInButton = async () => {
 
@@ -10,17 +13,16 @@ const SignInButton = async () => {
                 "use server";
                 await signIn("google");
             }}>
-                <button type="submit" className="btn btn-neutral">Sign in with Google</button>
+                <button type="submit" className="btn btn-primary">Sign In</button>
             </form>
         )
     } else {
         return (
             <form action={async () => {
                 "use server";
-                await signOut();
+                redirect("/spaces");
             }}>
-                <h1>{session.user?.name}</h1>
-                <button type="submit" className="btn btn-error">Sign Out</button>
+                <button type="submit" className="btn btn-primary">Go To App</button>
             </form>
         )
     }
