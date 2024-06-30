@@ -3,6 +3,7 @@ import { faLessThan, faX } from "@fortawesome/free-solid-svg-icons";
 import ShowHierarchyModalButton from "./ShowHiearchyModalButton";
 import CategoriesHierarchy from "../../categories/CategoriesHierarchy";
 import { SpaceParams } from "../../layout";
+import SelectCategory from "@/app/components/selectCategory/SelectCategory";
 
 const NewAsset = ({ params }: { params: SpaceParams }) => {
 
@@ -68,7 +69,7 @@ const NewAsset = ({ params }: { params: SpaceParams }) => {
                             console.log("SIDJFLSDJFKJ");
                         }}>
                             {/* <button type="submit">SDFD</button> */}
-                            <CategoriesHierarchy spaceId={params.spaceId} select />
+                            <SelectCategory spaceId={params.spaceId} />
                         </form>
                     </div>
                     <form method="dialog" className="modal-backdrop">
