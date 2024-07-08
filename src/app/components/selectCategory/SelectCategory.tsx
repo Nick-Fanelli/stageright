@@ -1,8 +1,9 @@
 import { getSpaceCategories } from "@/actions/categories.actions";
-import { CategoryNode } from "@/app/space/[spaceId]/categories/CategoriesHierarchy";
+import { CategoryNode, extrapolateParents } from "@/app/space/[spaceId]/categories/CategoriesHierarchy";
 import { ICategory } from "@/models/category.model";
 import React from "react";
 import SelectTopLevelComponent from "./SelectTopLevelComponent";
+import SelectCategoryBottomLevelComponent from "./SelectCategoryBottomLevelComponent";
 
 type Props = {
 
@@ -24,7 +25,7 @@ const SelectCategory = async (props: Props) => {
 
     let children: React.ReactNode[] = [];
 
-    const categoryToElement = (category: ICategory, node: CategoryNode): React.ReactNode => {
+    const categoryToElement = (category: ICategory, node: CategoryNode): React.ReactNode => { // TODO: ONLY EXTRAPOLATE PARENTS ON CLICK
 
         if (category.children && category.children.length > 0) {
             let children: React.ReactNode[] = [];
@@ -39,15 +40,9 @@ const SelectCategory = async (props: Props) => {
 
             sortedCatChildren.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
 
-            return <SelectTopLevelComponent name={category.name} id={String(category._id)} children={children}  />
+            return <SelectTopLevelComponent name={category.name} id={String(category._id)} key={String(category._id)} children={children} parentsExtrapolated={extrapolateParents(node)} />
         } else {
-            return (
-                <li>
-                    <div className="flex justify-between w-full">
-                        <p>{category.name}</p>
-                    </div>
-                </li>
-            )
+            return <SelectCategoryBottomLevelComponent name={category.name} key={String(category._id)} parentsExtrapolated={extrapolateParents(node)} />
         }
 
     }

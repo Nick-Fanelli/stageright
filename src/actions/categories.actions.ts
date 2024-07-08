@@ -253,7 +253,6 @@ export const deleteSpaceCategory = async (spaceId: string, parents: string[]) =>
             break;
         }
 
-
         targetArray = targetArray[index].children || [];
 
     }
@@ -267,5 +266,33 @@ export const deleteSpaceCategory = async (spaceId: string, parents: string[]) =>
     targetArray.splice(index, 1);
 
     await space.save();
+
+}
+
+export const convertCategoryHierarchyToDisplayName = async (spaceId: string, parents: string[]) => {
+
+    const space = await getSpace(spaceId);
+
+    let returnString : string[] = [];
+
+    let targetArray = space.categories;
+
+    for(let i = 0; i < parents.length; i++) {
+
+        const parent = parents[i];
+
+        const index = targetArray.findIndex(curr => String(curr._id) === parent);
+
+        if(index == -1) {
+            break;
+        }
+
+        returnString.push(targetArray[index].name);
+
+        targetArray = targetArray[index].children || [];
+
+    }
+
+    return returnString;
 
 }
