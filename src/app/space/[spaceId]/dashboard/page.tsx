@@ -1,7 +1,7 @@
 import { faBox, faBoxesStacked, faList, faLocationDot, faLocationPin, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SpaceParams } from "../layout";
-import { getSpace } from "@/actions/spaces.actions";
+import { getSpaceStats } from "@/actions/spaces.actions";
 
 export const metadata = {
     title: 'Dashboard | Stage Right',
@@ -12,17 +12,17 @@ export const revalidate = 0;
 
 const Dashboard = async ({ params }: { params: SpaceParams}) => {
 
-    const space = await getSpace(params.spaceId);
+    const stats = await getSpaceStats(params.spaceId);
 
     return (
         <section id="dashboard" className="absolute top-0 left-0 right-0 bottom-4 overflow-y-hidden p-0">
 
-            <h1 className="ml-5 mt-6 mb-8 text-5xl font-black">{space.name}</h1>
+            <h1 className="ml-5 mt-6 mb-8 text-5xl font-black">{stats.name}</h1>
 
             <div className="h-full w-full flex flex-col items-center">
 
                 <div className="w-full flex flex-col gap-0 px-5">
-                    <div className="stats shadow  rounded-b-none">
+                    <div className="stats shadow rounded-b-none">
 
                         <div className="stat">
                             <div className="stat-figure">
@@ -47,7 +47,7 @@ const Dashboard = async ({ params }: { params: SpaceParams}) => {
                                 <FontAwesomeIcon icon={faUsers} className="text-4xl" />
                             </div>
                             <div className="stat-title">Users</div>
-                            <div className="stat-value">{space.access.length + 1}</div>
+                            <div className="stat-value">{stats.numUsers + 1}</div>
                             <div className="stat-desc">0 remaining</div>
                         </div>
 
@@ -61,7 +61,7 @@ const Dashboard = async ({ params }: { params: SpaceParams}) => {
                                 <FontAwesomeIcon icon={faLocationDot} className="text-4xl" />
                             </div>
                             <div className="stat-title">Locations</div>
-                            <div className="stat-value">{space.locations.length}</div>
+                            <div className="stat-value">{stats.numLocations}</div>
                         </div>
 
                         <div className="stat">
@@ -69,7 +69,7 @@ const Dashboard = async ({ params }: { params: SpaceParams}) => {
                                 <FontAwesomeIcon icon={faList} className="text-4xl" />
                             </div>
                             <div className="stat-title">Categories</div>
-                            <div className="stat-value">{space.categories.length}</div>
+                            <div className="stat-value">{stats.numCategories}</div>
                         </div>
 
                         <div className="stat">

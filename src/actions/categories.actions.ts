@@ -1,13 +1,20 @@
 "use server";
 
 import { ICategory } from "@/models/category.model";
-import { getSpace } from "./spaces.actions";
+import { editSpaceMiddleware, viewSpaceMiddleware } from "./actionMiddleware";
+import SpaceModel from "@/models/space.model";
 
 export const createDemoCategories = async (spaceId: string): Promise<void> => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
 
-    space.categories = [
+    const res = await SpaceModel.findById(spaceId).select('categories').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    res.categories = [
         {
             name: "Motorcycles", children: [
                 {
@@ -199,23 +206,37 @@ export const createDemoCategories = async (spaceId: string): Promise<void> => {
     ];
 
 
-    await space.save();
+    await res.save();
 
 }
 
 export const getSpaceCategories = async (spaceId: string): Promise<ICategory[]> => {
 
-    const space = await getSpace(spaceId);
+    await viewSpaceMiddleware(spaceId);
 
-    return space.categories;
+    const res = await SpaceModel.findById(spaceId).select('categories').exec();
+
+    console.log(res?.categories);
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    return res.categories;
 
 }
 
 export const createSpaceCategory = async (spaceId: string, parents: string[], name: string) => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
 
-    let targetArray = space.categories;
+    const res = await SpaceModel.findById(spaceId).select('categories').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    let targetArray = res.categories;
 
     for (let i = 0; i < parents.length; i++) {
         const parent = parents[i];
@@ -232,17 +253,23 @@ export const createSpaceCategory = async (spaceId: string, parents: string[], na
 
     targetArray.push({ name: name });
 
-    await space.save();
+    await res.save();
 
 }
 
 export const deleteSpaceCategory = async (spaceId: string, parents: string[]) => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select('categories').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
 
     const id = parents.pop();
 
-    let targetArray = space.categories;
+    let targetArray = res.categories;
 
     for (let i = 0; i < parents.length; i++) {
         const parent = parents[i];
@@ -265,17 +292,23 @@ export const deleteSpaceCategory = async (spaceId: string, parents: string[]) =>
 
     targetArray.splice(index, 1);
 
-    await space.save();
+    await res.save();
 
 }
 
 export const convertCategoryHierarchyToDisplayName = async (spaceId: string, parents: string[]) => {
 
-    const space = await getSpace(spaceId);
+    await viewSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select('categories').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
 
     let returnString : string[] = [];
 
-    let targetArray = space.categories;
+    let targetArray = res.categories;
 
     for(let i = 0; i < parents.length; i++) {
 

@@ -31,7 +31,7 @@ const NewAsset = async ({ params }: { params: SpaceParams }) => {
 
             <div className="mt-10 w-full">
 
-                <NewAssetForm spaceId={params.spaceId} locations={locations} />
+                <NewAssetForm spaceId={params.spaceId} locations={locations} redirectURL={redirectURL} />
 
                 <dialog id="cat_modal" className="modal w-full">
                     <div className="w-[80vw] modal-box max-w-[80vw]">

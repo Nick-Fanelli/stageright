@@ -1,32 +1,47 @@
 "use server";
 
 import { AccessLevel } from "@/models/access.model";
-import { getSpace } from "./spaces.actions";
+import { administerSpaceMiddleware } from "./actionMiddleware";
+import SpaceModel from "@/models/space.model";
 
-export const getAccess = async (spaceId: string) => { // TODO: ENSURE ADMIN
+export const getAccess = async (spaceId: string) => {
 
-    const space = await getSpace(spaceId);
+    await administerSpaceMiddleware(spaceId); // Ensure admin access
 
-    return space.access || [];
+    const res = await SpaceModel.findById(spaceId).select('access').exec();
+
+    return res?.access || [];
 
 }
 
-export const createAccess = async (spaceId: string, email: string, accessLevel: AccessLevel) => { // TODO: ENSURE ADMIN
+export const createAccess = async (spaceId: string, email: string, accessLevel: AccessLevel) => { 
     
-    const space = await getSpace(spaceId); 
+    await administerSpaceMiddleware(spaceId); // Ensure admin access
 
-    space.access = [...space.access, { email: email, accessLevel: accessLevel }];
+    const res = await SpaceModel.findById(spaceId).select('access').exec();
+    
+    if(!res) {
+        throw new Error("Could not find access in space");
+    }
 
-    await space.save();
+    res.access = [...res.access, { email: email, accessLevel: accessLevel }];
+
+    await res.save();
 
 }
 
-export const deleteAccess = async (spaceId: string, accessId: string) => { // TODO: ENSURE ADMIN
+export const deleteAccess = async (spaceId: string, accessId: string) => { 
 
-    const space = await getSpace(spaceId);
+    await administerSpaceMiddleware(spaceId); // Ensure admin access
 
-    space.access = space.access.filter(a => String(a._id) !== accessId);
+    const res = await SpaceModel.findById(spaceId).select('access').exec();
 
-    await space.save();
+    if(!res) {
+        throw new Error("Could not find access in space");
+    }
+
+    res.access = res.access.filter(a => String(a._id) !== accessId);
+
+    await res.save();
 
 }

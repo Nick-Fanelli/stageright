@@ -1,46 +1,71 @@
 "use server";
 
 import { ILocation } from "@/models/location.model";
-import { getSpace } from "./spaces.actions";
+import { editSpaceMiddleware, viewSpaceMiddleware } from "./actionMiddleware";
+import SpaceModel from "@/models/space.model";
 
-export const getSpaceLocations = async (id: string): Promise<ILocation[]> => {
+export const getSpaceLocations = async (spaceId: string): Promise<ILocation[]> => {
 
-    const space = await getSpace(id);
+    await viewSpaceMiddleware(spaceId);
 
-    return space.locations;
+    const res = await SpaceModel.findById(spaceId).select('locations').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    return res.locations;
 
 }
 
 export const createSpaceLocation = async (spaceId: string, locationName: string): Promise<void> => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
 
-    space.locations = [...space.locations, { locationName: locationName }];
+    const res = await SpaceModel.findById(spaceId).select('locations').exec();
 
-    await space.save();
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    res.locations = [...res.locations, { locationName: locationName }];
+
+    await res.save();
 
 }
 
 export const deleteSpaceLocation = async (spaceId: string, locationId: string): Promise<void> => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
 
-    space.locations = space.locations.filter(location => String(location._id) !== locationId);
-    await space.save();
+    const res = await SpaceModel.findById(spaceId).select('locations').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    res.locations = res.locations.filter(location => String(location._id) !== locationId);
+    await res.save();
 
 }
 
 export const updateSpaceLocation = async (spaceId: string, locationId: string, locationName: string): Promise<void> => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
 
-    const index = space.locations.findIndex(location => String(location._id) === locationId);
+    const res = await SpaceModel.findById(spaceId).select('locations').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    const index = res.locations.findIndex(location => String(location._id) === locationId);
 
     if (index == -1) {
         throw new Error("Unknown location id " + locationId);
     }
 
-    space.locations[index].locationName = locationName;
-    await space.save();
+    res.locations[index].locationName = locationName;
+    await res.save();
 
 }

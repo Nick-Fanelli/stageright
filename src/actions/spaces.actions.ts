@@ -1,18 +1,25 @@
 "use server";
 
 import SpaceModel, { ISpace } from "@/models/space.model";
-import { actionMiddleware } from "./actionMiddleware";
+import { actionMiddleware, viewSpaceMiddleware } from "./actionMiddleware";
+import { AccessLevel } from "@/models/access.model";
+import { space } from "postcss/lib/list";
 
-export const isUserAuthorizedForSpace = async (spaceId: string) : Promise<boolean> => {
+export type UserSpaceRelationship = AccessLevel | "owner" | undefined;
 
-    try {
-        await getSpace(spaceId);
-    } catch(e) {
-        console.error(e);
-        return false;
+export const getUserRelationshipToSpace = async (spaceId: string) : Promise<UserSpaceRelationship> => {
+
+    const [ _, dbUser ] = await actionMiddleware();
+
+    const res = await SpaceModel.findById(spaceId).select("owner access").exec();
+
+    if(res?.owner && String(res.owner) === String(dbUser.id)) {
+        return "owner";
     }
 
-    return true;
+    const access = res?.access.find((access) => access.email === dbUser.email);
+
+    return access?.accessLevel;
 
 }
 
@@ -39,29 +46,32 @@ export const getAllUserSpaces = async (): Promise<ISpace[]> => {
 
 }
 
-export const getSpace = async (spaceId: string): Promise<ISpace> => {
+export type SpaceStats = {
 
-    const space = await SpaceModel.findById(spaceId);
+    name: string,
+    numUsers: number,
+    numLocations: number,
+    numCategories: number
 
-    if(!space) {
-        throw new Error(`Space with id: ${spaceId}, could not be found`);
+}
+
+export const getSpaceStats = async (spaceId: string) : Promise<SpaceStats> => {
+
+    await viewSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select('name access.length locations.length categories.length').exec();
+
+    if(!res) {
+        throw new Error("Could not get stats of space");
     }
 
-    const [ _, dbUser ] = await actionMiddleware();
+    return {
 
-    // If is admin/owner
-    if(String(space.owner) === String(dbUser.id)) {
-        return space;
-    }
+        name: res.name,
+        numUsers: res.access.length,
+        numLocations: res.locations.length,
+        numCategories: res.categories.length
 
-    for(let i = 0; i < space.access.length; i++) {
-        const access = space.access[i];
-
-        if(access.email === dbUser.email && access.accessLevel === "admin") {
-            return space;
-        }
-    }
-
-    throw new Error("Access Denied");
+    }   
 
 }

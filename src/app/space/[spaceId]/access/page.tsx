@@ -14,6 +14,16 @@ const Access = ({ params }: { params: SpaceParams }) => {
 
     return (
         <section id="access" className="absolute top-0 left-0 right-0 bottom-4 overflow-y-hidden p-0 grid" style={{ gridTemplateRows: "7rem auto" }}>
+{/* 
+            <form action={async () => {
+
+                "use server";
+
+                // viewSpaceMiddleware(params.spaceId);
+
+            }}>
+                <button className="btn btn-primary" type="submit">Test</button>
+            </form> */}
 
             <div className="w-full h-34 flex justify-center items-center">
                 <div className="bg-base-100 w-11/12 rounded-xl flex items-center justify-between pr-5 h-20">

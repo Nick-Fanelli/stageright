@@ -6,12 +6,15 @@ import SelectCategory from "@/app/components/selectCategory/SelectCategory";
 import { ILocation } from "@/models/location.model";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
 
     spaceId: string,
     locations: { id: string, name: string }[]
+    redirectURL: string
 
 }
 
@@ -62,7 +65,7 @@ const NewAssetForm = (props: Props) => {
 
                 const uuid = await createNewAsset(props.spaceId, assetName, locationId);
 
-                console.log(uuid);
+                redirect(props.redirectURL);
 
             }}>
 

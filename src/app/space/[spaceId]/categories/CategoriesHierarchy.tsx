@@ -35,7 +35,7 @@ type Props = {
 
 const CategoriesHierarchy = async (props: Props) => {
 
-    const categories = (await getSpaceCategories(props.spaceId)).sort((a, b) => {
+    const categories = (await getSpaceCategories(props.spaceId) || []).sort((a, b) => {
         if(a.name > b.name)
             return 1;
         if(a.name < b.name)

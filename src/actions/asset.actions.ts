@@ -1,13 +1,19 @@
 "use server";
 
 import { generateAssetUUID } from "@/lib/uuid";
-import { getSpace } from "./spaces.actions";
 import { IAsset } from "@/models/assets.model";
-import mongoose, { Mongoose, ObjectId, SchemaTypes, Types } from "mongoose";
+import { editSpaceMiddleware, viewSpaceMiddleware } from "./actionMiddleware";
+import SpaceModel from "@/models/space.model";
 
 export const createNewAsset = async (spaceId: string, name: string, locationId?: string) : Promise<string> => {
 
-    const space = await getSpace(spaceId);
+    await editSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select('assets locations').exec();
+
+    if(!res) {
+        throw new Error("Could not find asset in space");
+    }
 
     let uuid = generateAssetUUID(); // Generate new UUID
     let collisionDetectionCount = 0;
@@ -15,7 +21,7 @@ export const createNewAsset = async (spaceId: string, name: string, locationId?:
     // Verify that the UUID is unique
     while(collisionDetectionCount < 10) {
 
-        const index = space.assets.findIndex((asset) => asset.uuid === uuid);
+        const index = res.assets.findIndex((asset) => asset.uuid === uuid);
 
         if(index == -1)
             break;
@@ -28,7 +34,7 @@ export const createNewAsset = async (spaceId: string, name: string, locationId?:
 
     // Verify and add location
     if(locationId) {
-        const location = space.locations.find((location) => String(location._id) === locationId);
+        const location = res.locations.find((location) => String(location._id) === locationId);
 
         if(location) { // Valid locationId
             asset.location = location._id;
@@ -36,10 +42,20 @@ export const createNewAsset = async (spaceId: string, name: string, locationId?:
     }
 
     // Push new asset into the array
-    space.assets = [...space.assets, asset];
+    res.assets = [...res.assets, asset];
     
-    await space.save();
+    await res.save();
 
     return uuid;
+
+}
+
+export const getAssets = async (spaceId: string) => {
+
+    await viewSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select('assets').exec();
+
+    return res?.assets || [];
 
 }
