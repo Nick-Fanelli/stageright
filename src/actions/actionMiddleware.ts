@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import connectDB from "@/lib/db";
+import { AccessDeniedError, NotAuthenticatedError } from "@/lib/errors";
 import SpaceModel from "@/models/space.model";
 import UserModel, { IUser } from "@/models/user.model";
 import { Session } from "next-auth";
@@ -14,7 +15,7 @@ export const actionMiddleware = async (): Promise<[Session, IUser]> => {
     const session = await auth();
 
     if (!session || !session.user || !session.user.email) {
-        throw new Error("Not Authenticated");
+        throw new NotAuthenticatedError();
     }
 
     let user = await UserModel.findOne({ email: session.user?.email });
@@ -37,7 +38,7 @@ export const viewSpaceMiddleware = async (spaceId: string) => {
     const session = await auth();
 
     if (!session || !session.user || !session.user.email) {
-        throw new Error("Not Authenticated");
+        throw new NotAuthenticatedError();
     }
 
     let user = await UserModel.findOne({ email: session.user?.email });
@@ -56,7 +57,7 @@ export const viewSpaceMiddleware = async (spaceId: string) => {
     const access = res?.access.find((access) => access.email === user.email);
 
     if(!access) {
-        throw new Error("Access Denied");
+        throw new AccessDeniedError();
     }
 
 }
@@ -68,7 +69,7 @@ export const editSpaceMiddleware = async (spaceId: string) => {
     const session = await auth();
 
     if (!session || !session.user || !session.user.email) {
-        throw new Error("Not Authenticated");
+        throw new NotAuthenticatedError();
     }
 
     let user = await UserModel.findOne({ email: session.user?.email });
@@ -87,13 +88,13 @@ export const editSpaceMiddleware = async (spaceId: string) => {
     const access = res?.access.find((access) => access.email === user.email);
 
     if(!access) {
-        throw new Error("Access Denied");
+        throw new AccessDeniedError();
     }
 
     if(access.accessLevel === "admin" || access.accessLevel === "editor") {
         return; // Allow
     } else {
-        throw new Error("Access Denied");
+        throw new AccessDeniedError();
     }
 
 }
@@ -105,7 +106,7 @@ export const administerSpaceMiddleware = async (spaceId: string) => {
     const session = await auth();
 
     if (!session || !session.user || !session.user.email) {
-        throw new Error("Not Authenticated");
+        throw new NotAuthenticatedError();
     }
 
     let user = await UserModel.findOne({ email: session.user?.email });
@@ -124,13 +125,13 @@ export const administerSpaceMiddleware = async (spaceId: string) => {
     const access = res?.access.find((access) => access.email === user.email);
 
     if(!access) {
-        throw new Error("Access Denied");
+        throw new AccessDeniedError();
     }
 
     if(access.accessLevel === "admin") {
         return; // Allow
     } else {
-        throw new Error("Access Denied");
+        throw new AccessDeniedError();      
     }
 
 }
@@ -142,7 +143,7 @@ export const ownSpaceMiddleware = async (spaceId: string) => {
     const session = await auth();
 
     if (!session || !session.user || !session.user.email) {
-        throw new Error("Not Authenticated");
+        throw new NotAuthenticatedError();
     }
 
     let user = await UserModel.findOne({ email: session.user?.email });
@@ -158,6 +159,6 @@ export const ownSpaceMiddleware = async (spaceId: string) => {
         return; 
     }
 
-    throw new Error("Access Denied");
+    throw new AccessDeniedError();
 
 }
