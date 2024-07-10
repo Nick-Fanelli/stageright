@@ -8,7 +8,7 @@ import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
 
@@ -25,7 +25,7 @@ const NewAssetForm = (props: Props) => {
     const catReturnInputRef = useRef<HTMLInputElement>(null);
     const locationsRef = useRef<HTMLSelectElement>(null);
 
-    const onCatReturnInputChange = async () => {
+    const onCatReturnInputChange = useCallback(async () => {
 
         const value: string[] = JSON.parse(catReturnInputRef.current?.value || "");
 
@@ -33,20 +33,22 @@ const NewAssetForm = (props: Props) => {
 
         setCategory(res);
 
-    }
+    }, [setCategory, props.spaceId]);
 
     useEffect(() => {
 
-        if (catReturnInputRef.current === null)
+        const catReturnInput = catReturnInputRef.current;
+
+        if(!catReturnInput)
             return;
 
-        catReturnInputRef.current.addEventListener("change", onCatReturnInputChange);
+        catReturnInput.addEventListener("change", onCatReturnInputChange);
 
         return () => {
-            catReturnInputRef.current?.removeEventListener("change", onCatReturnInputChange);
+            catReturnInput.removeEventListener("change", onCatReturnInputChange);
         }
 
-    }, [catReturnInputRef.current]);
+    }, [onCatReturnInputChange]);
 
     return (
         <>

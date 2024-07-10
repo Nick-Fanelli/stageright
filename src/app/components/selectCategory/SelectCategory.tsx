@@ -40,7 +40,7 @@ const SelectCategory = async (props: Props) => {
 
             sortedCatChildren.forEach((cat) => children.push(categoryToElement(cat, { id: String(cat._id), parent: node })));
 
-            return <SelectTopLevelComponent name={category.name} id={String(category._id)} key={String(category._id)} children={children} parentsExtrapolated={extrapolateParents(node)} />
+            return <SelectTopLevelComponent name={category.name} id={String(category._id)} key={String(category._id)} parentsExtrapolated={extrapolateParents(node)}>{children}</SelectTopLevelComponent>
         } else {
             return <SelectCategoryBottomLevelComponent name={category.name} key={String(category._id)} parentsExtrapolated={extrapolateParents(node)} />
         }
