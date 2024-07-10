@@ -23,13 +23,9 @@ const LocationsTable = async (props: Props) => {
     });
 
     return (
-        <>
-            {
-                locations.map((location, index) => (
-                    <LocationComponent key={`location-${location.locationName}${index}${location._id}`} id={String(location._id)} spaceId={props.spaceId} name={location.locationName} />
-                ))
-            }
-        </>
+        locations.map((location, index) => (
+            <LocationComponent key={`location-${location.locationName}${index}${location._id}`} id={String(location._id)} spaceId={props.spaceId} name={location.locationName} />
+        ))
     )
 
 }

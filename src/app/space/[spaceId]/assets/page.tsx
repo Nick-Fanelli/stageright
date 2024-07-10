@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import AssetsTable from "./(components)/AssetsTable";
 import { SpaceParams } from "../layout";
 import { redirect } from "next/navigation";
+import AssetsTableSuspense from "./(components)/AssetsTableSuspension";
 
 const Assets = ({ params } : { params: SpaceParams }) => {
 
@@ -47,7 +48,7 @@ const Assets = ({ params } : { params: SpaceParams }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <Suspense fallback={<h1>Loading</h1>}>
+                            <Suspense fallback={<AssetsTableSuspense />}>
                                 <AssetsTable spaceId={params.spaceId} />
                             </Suspense>
                         </tbody>

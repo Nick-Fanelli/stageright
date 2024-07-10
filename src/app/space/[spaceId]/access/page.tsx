@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import AccessTable from "./(components)/AccessTable";
 import ErrorBoundary from "next/dist/client/components/error-boundary";
+import AccessTableSuspense from "./(components)/AccessTableSuspension";
 
 export const metadata = {
     title: 'Access | Stage Right',
@@ -50,7 +51,7 @@ const Access = ({ params }: { params: SpaceParams }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <Suspense fallback={<h1>LOADING...</h1>}>
+                            <Suspense fallback={<AccessTableSuspense />}>
                                 <AccessTable spaceId={params.spaceId} />
                             </Suspense>
                         </tbody>
