@@ -6,7 +6,7 @@ import { SpaceParams } from "../layout";
 import { redirect } from "next/navigation";
 import AssetsTableSuspense from "./(components)/AssetsTableSuspension";
 
-const Assets = ({ params } : { params: SpaceParams }) => {
+const Assets = ({ params }: { params: SpaceParams }) => {
 
     return (
         <section id="assets" className="absolute top-0 left-0 right-0 bottom-0 overflow-y-hidden p-0 grid" style={{ gridTemplateRows: "7rem auto 4rem" }}>
@@ -19,6 +19,8 @@ const Assets = ({ params } : { params: SpaceParams }) => {
                             <FontAwesomeIcon icon={faBox} className="size-8 mr-3 ml-3" />
                             <h1 className="text-xl">Assets</h1>
                         </div>
+
+                        <input type="text" className="input input-bordered w-80" placeholder="Search" />
 
                     </div>
 
