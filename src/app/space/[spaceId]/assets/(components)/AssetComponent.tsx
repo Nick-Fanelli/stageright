@@ -1,6 +1,8 @@
 "use client";
 
+import { deleteAsset } from "@/actions/asset.actions";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Props = {
 
@@ -14,6 +16,8 @@ type Props = {
 }
 
 const AssetComponent = (props: Props) => {
+
+    const router = useRouter();
 
     return (
         <tr className="hover">
@@ -36,8 +40,8 @@ const AssetComponent = (props: Props) => {
                     const confirm = window.confirm("Are you sure you want to delete the location: " + props.name);
 
                     if (confirm) {
-                        // await deleteSpaceLocation(props.spaceId, props.id);
-                        // router.refresh();
+                        await deleteAsset(props.spaceId, props.id);
+                        router.refresh();
                     }
 
                 }}>Delete</p>

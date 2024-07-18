@@ -50,6 +50,28 @@ export const createNewAsset = async (spaceId: string, name: string, locationId?:
 
 }
 
+export const deleteAsset = async (spaceId: string, assetId: string) => {
+
+    await editSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select("assets").exec();
+
+    if(!res) {
+        throw new Error("Could not find asset in space");
+    }
+
+    const assetIndex = res.assets.findIndex((asset) => String(asset._id) === assetId);
+
+    if(assetIndex == -1) {
+        throw new Error(`Asset with id: ${assetId} not found`);
+    }
+
+    res.assets.splice(assetIndex, 1);
+
+    await res.save();
+    
+}
+
 export const getAssets = async (spaceId: string) => {
 
     await viewSpaceMiddleware(spaceId);
