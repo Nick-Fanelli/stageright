@@ -1,7 +1,7 @@
 "use client";
 
 import { createNewAsset } from "@/actions/asset.actions";
-import { convertCategoryHierarchyToDisplayName } from "@/actions/categories.actions";
+import { convertCategoryHierarchyToDisplayName } from "@/actions/category.actions";
 import SelectCategory from "@/app/components/selectCategory/SelectCategory";
 import { ILocation } from "@/models/location.model";
 import { faX } from "@fortawesome/free-solid-svg-icons";

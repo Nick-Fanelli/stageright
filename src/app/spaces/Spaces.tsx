@@ -1,4 +1,4 @@
-import { getAllUserSpaces } from "@/actions/spaces.actions";
+import { getAllUserSpaces } from "@/actions/space.actions";
 import SpaceCard from "./SpaceCard";
 
 export const revalidate = 0;

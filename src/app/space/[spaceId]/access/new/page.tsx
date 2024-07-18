@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { SpaceParams } from "../../layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLessThan } from "@fortawesome/free-solid-svg-icons";
-import { createSpaceLocation } from "@/actions/locations.actions";
+import { createSpaceLocation } from "@/actions/location.actions";
 import { createAccess } from "@/actions/access.actions";
 import email from "next-auth/providers/email";
 import { AccessLevel } from "@/models/access.model";

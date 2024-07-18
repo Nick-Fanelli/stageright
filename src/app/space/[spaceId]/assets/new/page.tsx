@@ -4,7 +4,7 @@ import { SpaceParams } from "../../layout";
 import SelectCategory from "@/app/components/selectCategory/SelectCategory";
 import NewAssetForm from "./NewAssetForm";
 import { redirect } from "next/navigation";
-import { getSpaceLocations } from "@/actions/locations.actions";
+import { getSpaceLocations } from "@/actions/location.actions";
 
 const NewAsset = async ({ params }: { params: SpaceParams }) => {
 

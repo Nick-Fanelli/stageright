@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteSpaceLocation } from "@/actions/locations.actions";
+import { deleteSpaceLocation } from "@/actions/location.actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 

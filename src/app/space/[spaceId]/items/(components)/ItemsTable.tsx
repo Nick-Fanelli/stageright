@@ -1,6 +1,6 @@
 import { getAssets } from "@/actions/asset.actions";
 import ItemsComponent from "./ItemsComponent";
-import { getSpaceLocations } from "@/actions/locations.actions";
+import { getSpaceLocations } from "@/actions/location.actions";
 
 type Props = {
 

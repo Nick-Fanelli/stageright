@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteSpaceCategory } from "@/actions/categories.actions";
+import { deleteSpaceCategory } from "@/actions/category.actions";
 import { CategoryNode, extrapolateParents } from "../CategoriesHierarchy";
 import CreateNewCategoryElement from "./CreateNewCategoryElement";
 import { useRouter } from "next/navigation";

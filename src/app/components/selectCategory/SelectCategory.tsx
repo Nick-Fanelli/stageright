@@ -1,4 +1,4 @@
-import { getSpaceCategories } from "@/actions/categories.actions";
+import { getSpaceCategories } from "@/actions/category.actions";
 import { CategoryNode, extrapolateParents } from "@/app/space/[spaceId]/categories/CategoriesHierarchy";
 import { ICategory } from "@/models/category.model";
 import React from "react";

@@ -1,4 +1,4 @@
-import { createDemoCategories } from "@/actions/categories.actions";
+import { createDemoCategories } from "@/actions/category.actions";
 import { faList, faTags } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SpaceParams } from "../layout";

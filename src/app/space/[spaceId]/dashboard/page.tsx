@@ -1,7 +1,7 @@
 import { faBox, faBoxesStacked, faList, faLocationDot, faLocationPin, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SpaceParams } from "../layout";
-import { getSpaceStats } from "@/actions/spaces.actions";
+import { getSpaceStats } from "@/actions/space.actions";
 
 export const metadata = {
     title: 'Dashboard | Stage Right',

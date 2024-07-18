@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import SideBarItems from "./(components)/SideBarItems";
 import ThemeController from "@/app/components/ThemeController";
 import Image from "next/image";
-import { getUserRelationshipToSpace } from "@/actions/spaces.actions";
+import { getUserRelationshipToSpace } from "@/actions/space.actions";
 
 export const metadata = {
     title: 'Space | Stage Right',

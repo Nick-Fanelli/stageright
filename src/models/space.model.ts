@@ -3,7 +3,7 @@ import UserModel from "./user.model";
 import { ILocation, locationSchema } from "./location.model";
 import { ICategory, categorySchema } from './category.model';
 import { IAccess, accessSchema } from "./access.model";
-import { IAsset, assetsSchema } from "./assets.model";
+import { IAsset, assetsSchema } from "./asset.model";
 
 export interface ISpace extends Document {
 
