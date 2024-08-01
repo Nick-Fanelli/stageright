@@ -5,7 +5,7 @@ export interface IItem {
     _id?: ObjectId
     name: String,
     sku: String,
-    amount: number,
+    quantity: number,
     location?: ObjectId
 
 }
@@ -23,7 +23,7 @@ export const itemsSchema = new Schema<IItem>({
         unique: true,
     },
 
-    amount: {
+    quantity: {
         type: Number,
         required: true,
         default: 0

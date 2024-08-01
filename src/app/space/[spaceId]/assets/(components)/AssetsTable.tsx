@@ -12,8 +12,10 @@ export const revalidate = 0;
 
 const AssetsTable = async (props: Props) => {
 
-    const assets = await getAssets(props.spaceId);
-    const locations = await getSpaceLocations(props.spaceId);
+    const [ assets, locations ] = await Promise.all([
+        getAssets(props.spaceId),
+        getSpaceLocations(props.spaceId)
+    ]);
 
     return (
 

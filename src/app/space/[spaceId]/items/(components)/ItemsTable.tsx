@@ -1,6 +1,7 @@
 import { getAssets } from "@/actions/asset.actions";
 import ItemsComponent from "./ItemsComponent";
 import { getSpaceLocations } from "@/actions/location.actions";
+import { getItems } from "@/actions/item.actions";
 
 type Props = {
 
@@ -12,27 +13,27 @@ export const revalidate = 0;
 
 const ItemsTable = async (props: Props) => {
 
-    // const assets = await getAssets(props.spaceId);
-    // const locations = await getSpaceLocations(props.spaceId);
+    const [ items, locations ] = await Promise.all([
+        getItems(props.spaceId),
+        getSpaceLocations(props.spaceId)
+    ]);
 
-    return null;
+    return (
 
-    // return (
+        items.map((item) => {
+            const location : string = item.location ? (locations.find((loc) => String(loc._id) === String(item.location))?.locationName) || "" : ""
 
-    //     assets.map((asset) => {
-    //         const location : string = asset.location ? (locations.find((loc) => String(loc._id) === String(asset.location))?.locationName) || "" : ""
+            return <ItemsComponent 
+                key={String(item._id)} 
+                id={String(item._id)} 
+                sku={String(item.sku)}
+                spaceId={props.spaceId} 
+                name={String(item.name)} 
+                location={location}
+            />
+        })
 
-    //         return <ItemsComponent 
-    //             key={String(asset._id)} 
-    //             id={String(asset._id)} 
-    //             uuid={asset.uuid} 
-    //             spaceId={props.spaceId} 
-    //             name={asset.name} 
-    //             location={location}
-    //         />
-    //     })
-
-    // )
+    )
 
 }
 

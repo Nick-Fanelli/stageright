@@ -4,8 +4,9 @@ import ItemsTableSuspense from "./(components)/ItemsTableSuspension";
 import { Suspense } from "react";
 import ItemsTable from "./(components)/ItemsTable";
 import { SpaceParams } from "../layout";
+import { redirect } from "next/navigation";
 
-const ItemsPage = async (params: SpaceParams) => {
+const ItemsPage = async ({ params }: { params: SpaceParams }) => {
 
     return (
         <section id="locations" className="absolute top-0 left-0 right-0 bottom-4 overflow-y-hidden p-0 grid" style={{ gridTemplateRows: "7rem auto" }}>
@@ -24,7 +25,7 @@ const ItemsPage = async (params: SpaceParams) => {
                     <div className="w-64 flex items-center justify-end">
                         <form action={async () => {
                             "use server";
-                            // redirect(`/space/${params.spaceId}/locations/new`);
+                            redirect(`/space/${params.spaceId}/items/new`);
                         }}>
                             <button type="submit" className="btn btn-ghost text-base">New Item</button>
                         </form>

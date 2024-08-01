@@ -1,7 +1,7 @@
 "use server";
 
 import { generateAssetUUID } from "@/lib/uuid";
-import { IAsset } from "@/models/assets.model";
+import { IAsset } from "@/models/asset.model";
 import { editSpaceMiddleware, viewSpaceMiddleware } from "./actionMiddleware";
 import SpaceModel from "@/models/space.model";
 

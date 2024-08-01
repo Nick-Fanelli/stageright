@@ -4,6 +4,7 @@ import { ILocation, locationSchema } from "./location.model";
 import { ICategory, categorySchema } from './category.model';
 import { IAccess, accessSchema } from "./access.model";
 import { IAsset, assetsSchema } from "./asset.model";
+import { IItem, itemsSchema } from "./item.model";
 
 export interface ISpace extends Document {
 
@@ -11,6 +12,7 @@ export interface ISpace extends Document {
     owner: Schema.Types.ObjectId,
 
     assets: IAsset[],
+    items: IItem[],
 
     locations: ILocation[],
     categories: ICategory[],
@@ -34,6 +36,11 @@ const spaceSchema = new Schema<ISpace>({
 
     assets: {
         type: [assetsSchema],
+        required: true
+    },
+
+    items: {
+        type: [itemsSchema],
         required: true
     },
 

@@ -216,8 +216,6 @@ export const getSpaceCategories = async (spaceId: string): Promise<ICategory[]> 
 
     const res = await SpaceModel.findById(spaceId).select('categories').exec();
 
-    console.log(res?.categories);
-
     if(!res) {
         throw new Error("Could not find categories for space");
     } 

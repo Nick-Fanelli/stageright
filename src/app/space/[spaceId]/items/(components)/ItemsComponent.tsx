@@ -1,13 +1,14 @@
 "use client";
 
 import { deleteAsset } from "@/actions/asset.actions";
+import { deleteItem } from "@/actions/item.actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Props = {
 
     id: string
-    uuid: string
+    sku: string
     spaceId: string
     location: string
 
@@ -22,7 +23,7 @@ const ItemsComponent = (props: Props) => {
     return (
         <tr className="hover">
             <td>{props.name}</td>
-            <td>{props.uuid}</td>
+            <td>{props.sku}</td>
             <td>
                 <div className="text-sm breadcrumbs h-full p-0">
                     <ul>
@@ -40,7 +41,7 @@ const ItemsComponent = (props: Props) => {
                     const confirm = window.confirm("Are you sure you want to delete the location: " + props.name);
 
                     if (confirm) {
-                        await deleteAsset(props.spaceId, props.id);
+                        await deleteItem(props.spaceId, props.id);
                         router.refresh();
                     }
 
