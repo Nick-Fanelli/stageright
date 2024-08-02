@@ -65,7 +65,9 @@ const NewAssetForm = (props: Props) => {
                 const selectedIndex: number = locationsRef.current?.selectedIndex || 0;
                 const locationId = locationsRef.current?.children[selectedIndex].getAttribute("location-id") || undefined;
 
-                const uuid = await createNewAsset(props.spaceId, assetName, locationId);
+                const catValue: string[] = JSON.parse(catReturnInputRef.current?.value || "");
+
+                await createNewAsset(props.spaceId, assetName, locationId, catValue.length > 0 ? catValue : undefined);
 
                 redirect(props.redirectURL);
 

@@ -5,7 +5,7 @@ import { IAsset } from "@/models/asset.model";
 import { editSpaceMiddleware, viewSpaceMiddleware } from "./actionMiddleware";
 import SpaceModel from "@/models/space.model";
 
-export const createNewAsset = async (spaceId: string, name: string, locationId?: string) : Promise<string> => {
+export const createNewAsset = async (spaceId: string, name: string, locationId?: string, categoryHierarchy?: string[]) : Promise<string> => {
 
     await editSpaceMiddleware(spaceId);
 
@@ -39,6 +39,10 @@ export const createNewAsset = async (spaceId: string, name: string, locationId?:
         if(location) { // Valid locationId
             asset.location = location._id;
         }
+    }
+
+    if(categoryHierarchy) {
+        asset.category = categoryHierarchy;
     }
 
     // Push new asset into the array

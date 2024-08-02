@@ -6,6 +6,7 @@ export interface IAsset {
     name: string
     uuid: string,
     location?: ObjectId
+    category?: string[]
 
 }
 
@@ -25,6 +26,11 @@ export const assetsSchema = new Schema<IAsset>({
     location: {
         type: Schema.Types.ObjectId,
         required: false,
+    },
+
+    category: {
+        type: [String],
+        required: false
     }
 
 });
