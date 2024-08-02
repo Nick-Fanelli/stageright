@@ -27,7 +27,7 @@ const NewAssetForm = (props: Props) => {
 
     const onCatReturnInputChange = useCallback(async () => {
 
-        const value: string[] = JSON.parse(catReturnInputRef.current?.value || "");
+        const value: string[] = catReturnInputRef.current?.value ? JSON.parse(catReturnInputRef.current.value) : "";
 
         const res = await convertCategoryHierarchyToDisplayName(props.spaceId, value);
 
@@ -65,7 +65,7 @@ const NewAssetForm = (props: Props) => {
                 const selectedIndex: number = locationsRef.current?.selectedIndex || 0;
                 const locationId = locationsRef.current?.children[selectedIndex].getAttribute("location-id") || undefined;
 
-                const catValue: string[] = JSON.parse(catReturnInputRef.current?.value || "");
+                const catValue: string[] = catReturnInputRef.current?.value ? JSON.parse(catReturnInputRef.current.value) : "";
 
                 await createNewAsset(props.spaceId, assetName, locationId, catValue.length > 0 ? catValue : undefined);
 

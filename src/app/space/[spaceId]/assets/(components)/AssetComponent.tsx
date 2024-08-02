@@ -3,6 +3,7 @@
 import { deleteAsset } from "@/actions/asset.actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type Props = {
 
@@ -12,6 +13,7 @@ type Props = {
     location: string
 
     name: string
+    category: string[]
 
 }
 
@@ -26,9 +28,11 @@ const AssetComponent = (props: Props) => {
             <td>
                 <div className="text-sm breadcrumbs h-full p-0">
                     <ul>
-                        <li>Parts</li>
-                        <li>Brakes</li>
-                        <li>Brake Lines</li>
+                        {
+                            props.category.map(cat => (
+                                <li key={cat}>{cat}</li>
+                            ))
+                        }
                     </ul>
                 </div>
             </td>

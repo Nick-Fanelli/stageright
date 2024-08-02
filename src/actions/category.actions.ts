@@ -327,3 +327,35 @@ export const convertCategoryHierarchyToDisplayName = async (spaceId: string, par
     return returnString;
 
 }
+
+export const getMapOfCategoryObjectIdToSimpleName = async (spaceId: string) : Promise<Record<string, string>[]> => {
+
+    await viewSpaceMiddleware(spaceId);
+
+    const res = await SpaceModel.findById(spaceId).select('categories').exec();
+
+    if(!res) {
+        throw new Error("Could not find categories for space");
+    } 
+
+    const extrapolate = (array: ICategory[]) : Record<string, string>[] => {
+
+        let records: Record<string, string>[] = [];
+
+        array.forEach((cat) => {
+
+            records.push({ id: String(cat._id), name: cat.name });
+            
+            if(cat.children && cat.children.length > 0) {
+                records = [...records, ...extrapolate(cat.children)];
+            }
+
+        })
+
+        return records;
+
+    }
+
+    return extrapolate(res.categories);
+
+}
