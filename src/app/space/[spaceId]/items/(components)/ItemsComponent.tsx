@@ -13,6 +13,7 @@ type Props = {
     location: string
 
     name: string
+    quantity: number
 
 }
 
@@ -22,8 +23,12 @@ const ItemsComponent = (props: Props) => {
 
     return (
         <tr className="hover">
+            <td>
+                <input type="checkbox" name="" id="" className="checkbox" />
+            </td>
             <td>{props.name}</td>
             <td>{props.sku}</td>
+            <td>{props.location}</td>
             <td>
                 <div className="text-sm breadcrumbs h-full p-0">
                     <ul>
@@ -33,7 +38,7 @@ const ItemsComponent = (props: Props) => {
                     </ul>
                 </div>
             </td>
-            <td>{props.location}</td>
+            <td>{props.quantity}</td>
             <td className="flex gap-3">
                 <Link className="link" href={`/space/${props.spaceId}/assets/edit/${props.id}`}>Edit</Link>
 

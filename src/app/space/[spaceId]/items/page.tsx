@@ -40,10 +40,12 @@ const ItemsPage = async ({ params }: { params: SpaceParams }) => {
                     <table className="table table-zebra w-full">
                         <thead>
                             <tr className="">
+                                <th className="px-10"></th> 
                                 <th className="w-3/12">Item Name</th> 
-                                <th className="w-3/12">Item SKU</th> 
+                                <th className="w-2/12">Item SKU</th> 
+                                <th className="w-2/12">Location</th> 
                                 <th className="w-3/12">Category</th> 
-                                <th className="w-3/12">Location</th> 
+                                <th className="w-2/12">Stock Quantity</th> 
                                 <th className="px-10"></th> 
                             </tr>
                         </thead>

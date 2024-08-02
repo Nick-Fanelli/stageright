@@ -30,6 +30,7 @@ const ItemsTable = async (props: Props) => {
                 spaceId={props.spaceId} 
                 name={String(item.name)} 
                 location={location}
+                quantity={item.quantity}
             />
         })
 
