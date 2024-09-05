@@ -1,12 +1,26 @@
+"use client";
+
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createSpace } from "@/actions/space.actions";
+import { loadStripe } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
 
-export const metadata = {
-    title: 'New Space | Stage Right'
-}
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
 const NewSpace = () => {
+
+    const [clientSecret, setClientSecret] = useState<string>("");
+
+    useEffect(() => {
+        fetch("/api/create-payment-intent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ itemId: "space" })
+        })
+            .then((res) => res.json())
+            .then((data) => setClientSecret(data.clientSecret));
+    }, []);
 
     return (
         <section id="new-space" className="h-screen w-screen overflow-hidden">
@@ -15,7 +29,7 @@ const NewSpace = () => {
 
             <h1 className="text-center text-5xl mt-10">Create New Space</h1>
 
-            <form 
+            {/* <form 
             className="text-center w-screen flex justify-center items-center flex-col mt-20"
             action={async (e) => {
                 "use server";
@@ -50,7 +64,7 @@ const NewSpace = () => {
 
                 <button type="submit" className="btn btn-primary w-1/2 mt-10">Create Space</button>
 
-            </form>
+            </form> */}
 
         </section>
     )

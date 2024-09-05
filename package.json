@@ -13,11 +13,14 @@
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.2.0",
     "mongoose": "^8.4.1",
-    "next": "^14.2.4",
+    "next": "^14.2.5",
     "next-auth": "^5.0.0-beta.18",
     "react": "^18",
     "react-dom": "^18",
+    "stripe": "^16.7.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
